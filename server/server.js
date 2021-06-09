@@ -111,7 +111,6 @@ app.post('/api/login', function (req, res, next) {
 
 			// req.user contains the authenticated user, we send all the user info back
 			// this is coming from userDao.getUser()
-      console.log(res)
 			return res.json(req.user);
 		});
 	})(req, res, next);

@@ -11,6 +11,7 @@ const db = new sqlite.Database("surveys.db", (err) => {
 
 
 exports.getAdmin = (email, password) => {
+	console.log(email)
   return new Promise((resolve, reject) => {
     const sql = 'SELECT * FROM admin WHERE email = ?';
 

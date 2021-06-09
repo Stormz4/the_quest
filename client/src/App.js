@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { Container, Col, Row } from "react-bootstrap";
+import { Container, Col, Button, Row } from "react-bootstrap";
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -15,7 +15,6 @@ import API from "./API"
 
 function App() {
 	const [surveyList, setSurveyList] = useState([]); 
-	const [user, setUser] = useState({});
 	const [dirty, setDirty] = useState(true);
 	const [loggedIn, setLoggedIn] = useState(false);
 
@@ -27,7 +26,7 @@ function App() {
 			setLoggedIn(true);
 			setDirty(true);
 			console.log(userInfo);
-			alert("Welcome!")
+			alert(`Welcome, ${userInfo.name}!`);
 			return true; 
 		} catch (err) {
 			alert(err);
@@ -35,60 +34,111 @@ function App() {
 		}
 	};
 
+	const logout = async () => {
+		await API.logout();
+		setLoggedIn(false);
+		setSurveyList([]);
+	};
+
+	useEffect(() => {
+		const checkAuth = async () => {
+			try {
+				// here you have the user info, if already logged in
+				// TODO: store them somewhere and use them, if needed
+				let user = await API.getAdminInfo();
+				setLoggedIn(true);
+			} catch (err) {
+				console.error(err.error);
+			}
+		};
+		checkAuth();
+	}, []);
+
+
     useEffect(() => {
 				//useEffect è un hook che permette di usare i lyfecycle del component. Equivale alla componentDidMount, componentDidUpdate, componentWillUnmount.
+			const getAllSurveys = async () => {
+				const surveys = await API.getAllSurveys();
+				setSurveyList(surveys);
+			};
 
-				const getAllSurveys = async () => {
-					const surveys = await API.getAllSurveys();
-					setSurveyList(surveys);
-				};
+			if (loggedIn){
+				getAllSurveys().then(() => {
+					setDirty(false);
+				});
+			}
 
-					// console.log    da vedere, fa due richieste, magari dividere la funzione in 2
-
-					getAllSurveys().then(() => {
-						setDirty(false);
-					});
-
-		}, [dirty, user, loggedIn]);
+		}, [dirty, loggedIn]);
 
     return (
 			<Router>
 				<Switch>
 					<Route
-						path="/"
-						render={({ match }) => (
-							<>
-								<NavigationBar login={login} ></NavigationBar>
-								<Container
-									fluid
-									className="min-vh-100 App bg-light"
-									style={{ marginLeft: 0, marginRight: 0, padding: 0 }}
-								>
+						path="/admin"
+						render={() =>
+							loggedIn ? (
+								<>
+									<NavigationBar
+										logout={logout}
+										loggedIn={loggedIn}
+									></NavigationBar>{" "}
 									<Row
 										className="justify-content-center text-light"
 										style={{ backgroundColor: "seagreen" }}
 									>
 										{" "}
-										<h2>
-											Welcome to TheQuest. Enjoy our surveys!{" "}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												width="32"
-												height="32"
-												fill="currentColor"
-												class="bi bi-list-nested"
-												viewBox="0 0 16 16"
-											>
-												<path
-													fill-rule="evenodd"
-													d="M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"
-												/>
-											</svg>
-										</h2>
 									</Row>
 									<QuestionaryContainer></QuestionaryContainer>
-								</Container>
-								<Footer></Footer>
+								</>
+							) : (
+								<Redirect to="/" />
+							)
+						}
+					></Route>
+					<Route
+						path="/"
+						render={() => (
+							<>
+								{loggedIn ? (
+									<Redirect path="/" to="/admin" />
+								) : (
+									<>
+										<NavigationBar
+											loggedIn={loggedIn}
+											login={login}
+										></NavigationBar>
+										<Container
+											fluid
+											className="min-vh-100 App bg-light"
+											style={{ marginLeft: 0, marginRight: 0, padding: 0 }}
+										>
+											<Row
+												className="justify-content-center text-light"
+												style={{ backgroundColor: "seagreen" }}
+											>
+												{" "}
+												<h2>
+													Welcome to TheQuest. Enjoy our surveys!{" "}
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														width="32"
+														height="32"
+														fill="currentColor"
+														class="bi bi-list-nested"
+														viewBox="0 0 16 16"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"
+														/>
+													</svg>
+												</h2>
+											</Row>
+											<QuestionaryContainer></QuestionaryContainer>
+										</Container>
+										<Footer></Footer>
+									</>
+								)}
 							</>
 						)}
 					></Route>

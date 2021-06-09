@@ -2,6 +2,7 @@ import { Button, Modal, Form, Col, Row, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { Formik } from "formik";
 import API from "./API";
+import {Redirect} from "react-router-dom";
 
 function LoginModal(props) {
 	const [emailNoCase, setEmail] = useState("");
@@ -27,7 +28,10 @@ function LoginModal(props) {
         if(valid)
         {
           let success = props.login(credentials);
-          if (success) handleClose();
+          if (success){
+              handleClose();
+              <Redirect to="admin"></Redirect>
+          }
         }
         else {
           setErrorMessage('Password should be at least 6 characters.');

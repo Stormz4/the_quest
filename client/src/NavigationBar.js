@@ -10,12 +10,10 @@ function NavigationBar (props) {
 				<Navbar collapseOnSelect className="p-2" expand="md" variant="light">
 					<Container
 						fluid
-						className="justify-content-between align-items-center m-0"
+						className="justify-content-between align-items-center"
 					>
-						<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-
 						<Navbar.Brand>
-							<Row className="align-items-center">
+							<Row className="align-items-center ml-1">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									width="32"
@@ -33,15 +31,65 @@ function NavigationBar (props) {
 						</Navbar.Brand>
 
 						<div className="mr-1">
-							<Button
-								style={{ backgroundColor: "seagreen" }}
-								onClick={() => {
-									setShow(true);
-								}}
-							>
-								Login
-							</Button>{" "}
-							{"    "}
+							{props.loggedIn ? (
+								<>
+									<Button variant="success" className="ml-0 p-2">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="32"
+											height="32"
+											fill="currentColor"
+											class="bi bi-file-earmark-text"
+											viewBox="0 0 16 16"
+										>
+											<path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
+											<path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+										</svg>{" "}
+										Add a survey
+									</Button>{" "}
+									<Button
+										variant="danger"
+										className="p-2"
+										onClick={() => {
+											props.logout();
+										}}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="32"
+											height="32"
+											fill="currentColor"
+											class="bi bi-door-closed"
+											viewBox="0 0 16 16"
+										>
+											<path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z" />
+											<path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" />
+										</svg>{" "}
+										Logout
+									</Button>
+								</>
+							) : (
+								<Button
+									variant="success"
+									className=""
+									onClick={() => {
+										setShow(true);
+									}}
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="32"
+										height="32"
+										fill="currentColor"
+										class="bi bi-door-open"
+										viewBox="0 0 16 16"
+									>
+										<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z" />
+										<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z" />
+									</svg>{" "}
+									Login
+								</Button>
+							)}
 						</div>
 					</Container>
 
@@ -51,9 +99,9 @@ function NavigationBar (props) {
 				</Navbar>
 
 				<LoginModal
-                    login={props.login}
+					login={props.login}
 					modify={props.modify}
-                    show={show}
+					show={show}
 					setShow={setShow}
 					setModify={props.setModify}
 					setDirty={props.setDirty}

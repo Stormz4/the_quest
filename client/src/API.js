@@ -16,7 +16,7 @@ async function getAllSurveys(){
 }
 
 async function login(credentials) {
-
+    console.log(JSON.stringify(credentials));
     let response = await fetch("/api/login", {
 			method: "POST",
 			headers: {
@@ -24,6 +24,7 @@ async function login(credentials) {
 			},
 			body: JSON.stringify(credentials),
 		});
+        console.log(response.data)
 		if (response.ok) {
 			const user = await response.json();
 			return user;
@@ -41,7 +42,7 @@ async function logout() {
 	await fetch("/api/login/current", { method: "DELETE" });
 }
 
-async function getUserInfo() {
+async function getAdminInfo() {
 	const response = await fetch(BASEURL + "/login/current");
 	const userInfo = await response.json();
 	if (response.ok) {
@@ -54,6 +55,6 @@ async function getUserInfo() {
 
 
 const API = {
-	getAllSurveys, login, logout, getUserInfo
+	getAllSurveys, login, logout, getAdminInfo
 };
 export default API;
