@@ -8,6 +8,7 @@ async function getAllSurveys(){
 	try {
 		const res = await axios.get(url);
 		const data = await res.data;
+		console.log(data);
 		return data;
 	} catch (error) {
 		console.log(error);

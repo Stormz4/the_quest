@@ -11,7 +11,8 @@ function QuestionaryRow(props) {
 		<ListGroup.Item className="container-fluid bg-light ">
 			<Row>
 				<Col lg={10} className="m-0 p-0">
-					<h2>{props.item.titolo}</h2>
+					<h2>{props.item.title}</h2>
+					<h8><i>made by {props.item.adminName}</i></h8>
 				</Col>
 				<Col lg={2} className="m-0 p-0">
 					<Button

@@ -62,7 +62,7 @@ function App() {
 				setSurveyList(surveys);
 			};
 
-			if (loggedIn){
+			if (!loggedIn){
 				getAllSurveys().then(() => {
 					setDirty(false);
 				});
@@ -134,7 +134,7 @@ function App() {
 													</svg>
 												</h2>
 											</Row>
-											<QuestionaryContainer></QuestionaryContainer>
+											<QuestionaryContainer surveyList={surveyList}></QuestionaryContainer>
 										</Container>
 										<Footer></Footer>
 									</>

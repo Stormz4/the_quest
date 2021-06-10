@@ -2,16 +2,15 @@ import { Container, Col, Row, ListGroup} from "react-bootstrap";
 import QuestionaryRow from "./QuestionaryRow";
 
 function QuestionaryContainer(props) {
-    let quests = [{"id":0, "titolo":"Interstellar"}, {"id":1, "titolo":"Rock Bottom"}];
+    let surveyList = props.surveyList;
 
-                 
-    console.log(quests)
+
 	function renderQuests() {
         
-		if (quests && quests.length > 0) {
-			return quests.map((item) => (
+		if (surveyList && surveyList.length > 0) {
+			return surveyList.map((item) => (
 				<QuestionaryRow
-					quest={quests}
+					surveyList={surveyList}
 					item={item}
 					key={item.id}
 					setDirty={props.setDirty}

@@ -13,29 +13,6 @@ app = new express();
 app.use(morgan("dev"));
 app.use(express.json());
 
-/****** API *****
- * *****************************************************
- *
- *  
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * *****************************************************
- * */
 
 passport.use(
 	new LocalStrategy(
@@ -95,9 +72,44 @@ const isLoggedIn = (req, res, next) => {
 	return res.status(401).json({ error: "not authenticated" });
 };
 
+/****** API *****
+ * *****************************************************
+ * GET /api/surveys
+ *     retrieves all the surveys made by every user
+ *  
+ * 
+ * 
+ * 
+ * 
+ * 
+ * POST /api/login
+ * 		
+ * 
+ * DELETE /api/login/current
+ * 
+ * 
+ * GET /api/login/current
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * *****************************************************
+ * */
+
+
+app.get('/api/surveys', async (req, res) => {
+    await dao.getAllSurveys()
+    .then(surveys => res.json(surveys))
+    .catch(()=> res.status(500).json("Database unreachable"));
+});
 
 //login
-app.post('/api/login', function (req, res, next) {
+app.post('/api/login',[
+    check('email').isEmail(),
+    check('password').isString()],function (req, res, next) {
 	passport.authenticate("local", (err, user, info) => {
 		if (err) return next(err);
 
@@ -119,7 +131,6 @@ app.post('/api/login', function (req, res, next) {
 // DELETE /login/current
 // logout
 app.delete("/api/login/current", (req, res) => {
-	//isloggedIn???
 	req.logout();
 	res.end();
 });

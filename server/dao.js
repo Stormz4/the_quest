@@ -50,3 +50,27 @@ exports.getAdminById = (id) => {
 		});
 	});
 };
+
+exports.getAllSurveys= () => {
+	return new Promise((resolve, reject) => {
+		const sql = "SELECT * FROM survey S, question Q, answer A1, admin A2 WHERE S.id = Q.ref_s AND Q.id=A1.ref_q AND S.ref_A = A2.id";
+		db.all(sql, [], (err, rows) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			const surveys = rows.map((e) => ({
+				id: e.id,
+				title: e.title,
+        adminName: e.name,
+        question: e.question,
+        min: e.min,
+        max: e.max,
+        open: e.open, 
+        required: e.required,
+        option_text:e.option_text,
+			}));
+			resolve(surveys);
+		});
+	});
+};
