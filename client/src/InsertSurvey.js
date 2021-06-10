@@ -15,10 +15,10 @@ function InsertSurvey(props) {
 
     function renderQuestions() {
 		if ( question && question.length > 0) {
-			return question.map((item) => (
+			return question.map((item, index) => (
 				<InsertSurveyRow
 					item={item}
-					key={item.id}
+					id={index}
 				></InsertSurveyRow>
 			));
 		}
