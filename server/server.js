@@ -77,7 +77,8 @@ const isLoggedIn = (req, res, next) => {
  * GET /api/surveys
  *     retrieves all the surveys made by every user
  *  
- * 
+ * GET /api/surveys/admin
+ * 		retrieves all the surveys made by an admin, using the session cookie
  * 
  * 
  * 
@@ -104,6 +105,15 @@ app.get('/api/surveys', async (req, res) => {
     await dao.getAllSurveys()
     .then(surveys => res.json(surveys))
     .catch(()=> res.status(500).json("Database unreachable"));
+});
+
+app.get("/api/surveys/admin", isLoggedIn, async (req, res) => {
+	console.log(req.user.id);
+
+	await dao
+		.getAllSurveysById(req.user.id)
+		.then((surveys) => res.json(surveys))
+		.catch(() => res.status(500).json("Database unreachable"));
 });
 
 //login

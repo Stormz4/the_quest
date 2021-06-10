@@ -17,6 +17,7 @@ function ModalForm(props) {
 	}
 
 	console.log(answers)
+	/*
 	const renderForm=()=>{
 		if (survey.question!=undefined){
 			i++;
@@ -38,6 +39,7 @@ function ModalForm(props) {
 					)		
 		}
 	}
+	*/
 	
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -83,7 +85,8 @@ function ModalForm(props) {
 											<div>{errors.description}</div>
 										)}
 									</Form.Group>
-									{renderForm()}
+									{//renderForm()
+									}
 									<Modal.Footer className="justify-content-center ">
 										<Button variant="secondary" onClick={handleClose}>
 											Close

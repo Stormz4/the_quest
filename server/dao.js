@@ -53,24 +53,60 @@ exports.getAdminById = (id) => {
 
 exports.getAllSurveys= () => {
 	return new Promise((resolve, reject) => {
-		const sql = "SELECT * FROM survey S, question Q, answer A1, admin A2 WHERE S.id = Q.ref_s AND Q.id=A1.ref_q AND S.ref_A = A2.id";
+		const sql = "SELECT * FROM survey S, admin A WHERE S.ref_A = A.id";
 		db.all(sql, [], (err, rows) => {
 			if (err) {
 				reject(err);
 				return;
 			}
+
+      let questions;
+
+      /*
+      db.all(
+				"SELECT * FROM survey S, question Q, answer A WHERE  S.id = Q.ref_s AND Q.id=A.ref_q", [], (err, rows) =>{
+          if (err) {
+							reject(err);
+							return;
+					}
+          console.log("AAAAAAAAAAAAAAAAAAA")
+          console.log(rows)
+          questions = rows;
+          */
+          const surveys = rows.map((e) => ({
+									id: e.id,
+									title: e.title,
+									adminName: e.name,
+									question: questions,
+					}));
+          console.log(surveys)
+					resolve(surveys);
+        });
+		//);
+		//});
+	});
+};
+
+
+exports.getAllSurveysById = (id) => {
+  console.log("USER:")
+  console.log(id);
+	return new Promise((resolve, reject) => {
+		const sql = "SELECT * FROM survey S, admin A WHERE A.id = ? AND S.ref_A = A.id ";
+		db.all(sql, [id], (err, rows) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+      console.log(rows)
 			const surveys = rows.map((e) => ({
 				id: e.id,
 				title: e.title,
-        adminName: e.name,
-        question: e.question,
-        min: e.min,
-        max: e.max,
-        open: e.open, 
-        required: e.required,
-        option_text:e.option_text,
+				adminName: e.name,
 			}));
+
 			resolve(surveys);
-		});
+			}
+		);
 	});
 };

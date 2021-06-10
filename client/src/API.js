@@ -16,6 +16,18 @@ async function getAllSurveys(){
 	}
 }
 
+async function getAllSurveysById() {
+	let url = BASEURL + `/surveys/admin`;
+	try {
+		const res = await axios.get(url);
+		const data = await res.data;
+		console.log(data);
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 async function login(credentials) {
     console.log(JSON.stringify(credentials));
     let response = await fetch("/api/login", {
@@ -56,6 +68,10 @@ async function getAdminInfo() {
 
 
 const API = {
-	getAllSurveys, login, logout, getAdminInfo
+	getAllSurveys,
+	login,
+	logout,
+	getAdminInfo,
+	getAllSurveysById
 };
 export default API;
