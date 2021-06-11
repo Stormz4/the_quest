@@ -32,13 +32,13 @@ function InsertSurvey(props) {
 
 	const addSurvey = async(titleToAdd, questionsToAdd) =>{
 
-		API.addSurvey(titleToAdd, questionsToAdd)
-			.then(() => {
+
+		let res = API.addSurvey(titleToAdd, questionsToAdd)
+		.then(() => {
+				console.log(res)
 				setShow(false);
 				setType(-1);
-				setQuestion([]);
-				setTitle("");
-				<Redirect to="/" />
+				return <Redirect to="/" />
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -47,8 +47,13 @@ function InsertSurvey(props) {
 	}
 	const handleSubmit = (event) =>{
 		event.preventDefault();
-		addSurvey(title, question)
-
+		
+		if (title != undefined && title!="" && question.length > 0){
+			addSurvey(title, question)
+		}
+		else{
+			alert("You must add at least a question and a title.")
+		}
 
 	}
 
@@ -84,6 +89,7 @@ function InsertSurvey(props) {
 					</Button>
 				</Row>
 				<Row className="justify-content-center p-1 align-items-center">
+					<Form>
 					<Form.Group>
 						<Form.Label>Insert the title of your survey.</Form.Label>
 						<Form.Control
@@ -96,6 +102,7 @@ function InsertSurvey(props) {
 							onChange={(ev) => setTitle(ev.target.value)}
 						/>
 					</Form.Group>
+					</Form>
 				</Row>
 				<ListGroup variant="flush">{renderQuestions()}</ListGroup>
 				<ModalInsertSurvey

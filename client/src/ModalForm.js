@@ -7,8 +7,9 @@ import API from "./API"
 function ModalForm(props) {
     const [name, setName]=useState("");
 	let survey = props.item;
+	console.log(survey)
 	let i=0;
-	let answers = []
+	let answers=[]
 	const handleClose=()=>{
 		props.setShow(false);
 		survey = {}
@@ -16,8 +17,7 @@ function ModalForm(props) {
 		i=0;
 	}
 
-	console.log(answers)
-	/*
+	
 	const renderForm=()=>{
 		if (survey.question!=undefined){
 			i++;
@@ -39,7 +39,6 @@ function ModalForm(props) {
 					)		
 		}
 	}
-	*/
 	
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -68,24 +67,7 @@ function ModalForm(props) {
 											handleSubmit(values); // same shape as initial values
 									}}
 								>
-									<Form.Group>
-										<Form.Label>Insert your name </Form.Label>
-										<Form.Control
-											name="description"
-											required
-                                            value={name}
-											placeholder="Walk around"
-											type="text"
-                                            required
-											onChange={(ev) =>
-												setName(ev.target.value)
-											}
-										/>
-										{errors.description && touched.description && (
-											<div>{errors.description}</div>
-										)}
-									</Form.Group>
-									{//renderForm()
+									{renderForm()
 									}
 									<Modal.Footer className="justify-content-center ">
 										<Button variant="secondary" onClick={handleClose}>

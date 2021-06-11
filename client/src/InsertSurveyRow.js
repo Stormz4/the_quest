@@ -5,8 +5,7 @@ import API from "./API";
 import { move } from "formik";
 
 function InsertSurveyRow(props) {
-	console.log(props);
-	
+
 	const moveUp = () =>{
 		let q = [...props.question]
 		if (props.id == 0) {

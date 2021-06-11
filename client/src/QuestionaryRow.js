@@ -5,7 +5,19 @@ import API from "./API";
 
 function QuestionaryRow(props) {
     const [show, setShow] = useState(false);
+	console.log(props)
 
+	const handleSurvey = async (id) =>{
+		const getSurveyById = async(id) => {
+			const survey = await API.getSurveyById(id);
+			props.setSurvey(survey);
+		}
+
+		getSurveyById(id).then(()=>{
+			setShow(true);
+			console.log(props.survey)
+		})
+	}
 
 	return (
 		<ListGroup.Item className="container-fluid bg-light ">
@@ -18,7 +30,7 @@ function QuestionaryRow(props) {
 					<Button
 						variant="outline-success"
 						onClick={() => {
-							setShow(true);
+							handleSurvey(props.item.id); 
 						}}
 					>
 						<svg
@@ -35,7 +47,7 @@ function QuestionaryRow(props) {
 					</Button>
 				</Col>
 			</Row>
-			<ModalForm show={show} setShow={setShow} item={props.item}></ModalForm>
+			<ModalForm show={show} setShow={setShow} item={props.item} survey={props.survey}></ModalForm>
 		</ListGroup.Item>
 	);
 }

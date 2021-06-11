@@ -17,6 +17,7 @@ import InsertSurvey from "./InsertSurvey"
 
 function App() {
 	const [surveyList, setSurveyList] = useState([]); 
+	const [survey, setSurvey] = useState({})
 	const [dirty, setDirty] = useState(true);
 	const [loggedIn, setLoggedIn] = useState(false);
 
@@ -201,6 +202,8 @@ function App() {
 											</Row>
 											<QuestionaryContainer
 												surveyList={surveyList}
+												survey={survey}
+												setSurvey={setSurvey}
 											></QuestionaryContainer>
 										</Container>
 										<Footer></Footer>

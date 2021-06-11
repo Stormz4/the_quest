@@ -55,24 +55,10 @@ exports.getAllSurveys = () => {
 				return;
 			}
 
-			let questions;
-
-			/*
-      db.all(
-				"SELECT * FROM survey S, question Q, answer A WHERE  S.id = Q.ref_s AND Q.id=A.ref_q", [], (err, rows) =>{
-          if (err) {
-							reject(err);
-							return;
-					}
-          console.log("AAAAAAAAAAAAAAAAAAA")
-          console.log(rows)
-          questions = rows;
-          */
 			const surveys = rows.map((e) => ({
 				id: e.id,
 				title: e.title,
 				adminName: e.name,
-				question: questions,
 			}));
 			console.log(surveys);
 			resolve(surveys);
@@ -92,11 +78,15 @@ exports.createSurvey = (title, admin, questions) => {
 				return;
 			}
 			let idS = this.lastID;
+			console.log(this.lastID)
 			console.log(questions);
+			console.log("PROVAPROVAPROVA")
 			for (let i = 0; i < questions.length; i++) {
 				const sql2 =
-					"INSERT INTO question (ref_s, question, min, max, open, required) VALUES (?, ?, ?, ?, ?)";
-				db.run(
+					"INSERT INTO question (ref_s, question, min, max, open, required) VALUES (?, ?, ?, ?, ?, ?)";
+				console.log("DB GOIN")
+				console.log(questions[i].question)
+					db.run(
 					sql2,
 					[
 						idS,
@@ -108,9 +98,11 @@ exports.createSurvey = (title, admin, questions) => {
 					],
 					function (err) {
 						if (err) {
+							console.log("addio tensing")
 							reject(err);
 							return;
 						}
+						console.log("CI SIAMO? ", idQ)
 						let idQ = this.lastID;
 						if (questions[i].answers != null) {
 							const sql3 =
@@ -150,6 +142,58 @@ exports.createSurvey = (title, admin, questions) => {
 	});
 };
 
+exports.getSurveyById = (id) => {
+	return new Promise((resolve, reject) => {
+		console.log("PROVA: ",id)
+		// Obtain all the questions for a given Survey
+		const sql =
+			"SELECT * FROM question Q WHERE Q.ref_s = ?";
+		db.all(sql, [id], (err, rows) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			console.log(rows);
+			let idQ;
+			let survey;
+			let options = [];
+			for (let i=0; i<rows.length; i++){
+				console.log("CURR:", i,  rows[i]);
+
+				if (rows[i].open == 1){
+					// Non ho bisogno di prendere le option
+					
+					options.push(null);
+				}
+				else if(rows[i].open == 0){
+					console.log("ID_Q:" ,rows[i].id)
+					idQ = rows[i].id;
+					const sql2 = "SELECT * FROM option O WHERE O.ref_q = ?"
+					db.all(sql2, [idQ], (err, rows2) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						console.log("AO", rows2)
+						options.push(rows2)
+					});
+				}
+			}
+			console.log("VRIMM:", options)
+			survey = rows.map((e) => ({
+				question: e.question,
+				min: e.min,
+				max: e.max,
+				open: e.open,
+				required: e.required,
+				options: options,
+			}));
+			console.log("***********************", survey)
+			resolve(survey);
+		});
+	});
+};
+
 exports.getAllSurveysById = (id) => {
 	console.log("USER:");
 	console.log(id);
@@ -172,3 +216,4 @@ exports.getAllSurveysById = (id) => {
 		});
 	});
 };
+

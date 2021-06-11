@@ -78,8 +78,6 @@ function ModalInsertSurvey(props) {
 			let newQuestion = [...props.question, questionComplete];
 
 			props.setQuestion(newQuestion);
-			console.log(questionComplete);
-			console.log("Min:", min, "| Max: ", max, "| Question: ", question);
 			handleClose();
 		} else {
 			setErrorMessage("Min must be below or equal to max.");
@@ -120,7 +118,6 @@ function ModalInsertSurvey(props) {
 										type="string"
 										onChange={(ev) => {
 											setQuestion(ev.target.value);
-											console.log(question);
 										}}
 									/>
 									{errors.description && touched.description && (

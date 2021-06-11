@@ -14,7 +14,8 @@ function QuestionaryContainer(props) {
 					item={item}
 					key={item.id}
 					setDirty={props.setDirty}
-
+					survey={props.survey}
+					setSurvey={props.setSurvey}
 				></QuestionaryRow>
 			));
         }

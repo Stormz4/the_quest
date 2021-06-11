@@ -80,6 +80,9 @@ const isLoggedIn = (req, res, next) => {
  * GET /api/surveys/admin
  * 		retrieves all the surveys made by an admin, using the session cookie
  * 
+ * GET /api/surveys/id=:id
+ * 		retrieve a survey and his questions/answers by it's id
+ * 
  * POST /api/surveys
  * 		insert a survey for a given admin
  * 
@@ -117,10 +120,23 @@ app.get("/api/surveys/admin", isLoggedIn, async (req, res) => {
 		.catch(() => res.status(500).json("Database unreachable"));
 });
 
+app.get(
+	"/api/surveys/id=:id",
+	[check("id").isInt({ min: 0 })],
+	async (req, res) => {
+		console.log(req.params.id);
+
+		await dao
+			.getSurveyById(req.params.id)
+			.then((survey) => res.json(survey))
+			.catch(() => res.status(500).json("Database unreachable"));
+	}
+);
+
 
 app.post(
 	"/api/surveys",
-	[check("title").isString(), check("question").isObject()],
+	[check("title").isString(), check("questions").isArray()],
 	isLoggedIn,
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -128,7 +144,7 @@ app.post(
 			return res.status(422).json({ errors: errors.array() });
 		}
 		try {
-			await dao.createSurvey(title, req.user.id, questions);
+			await dao.createSurvey(req.body.title, req.user.id, req.body.questions);
 			res.status(201).end();
 		} catch (err) {
 			console.log(err);
