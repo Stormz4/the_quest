@@ -61,6 +61,7 @@ function ModalInsertSurvey(props) {
 					min: min,
 					max: max,
 					answers: genAnswers,
+					open: 0,
 					required: null,
 				};
 			} else {
@@ -69,6 +70,7 @@ function ModalInsertSurvey(props) {
 					required: +required,
 					max: maxChar,
 					min: null,
+					open: 1,
 					answers: null,
 				};
 			}
@@ -117,8 +119,9 @@ function ModalInsertSurvey(props) {
 										placeholder="Which is the best chocolate?"
 										type="string"
 										onChange={(ev) => {
-											setQuestion(ev.target.value)
-											console.log(question)}}
+											setQuestion(ev.target.value);
+											console.log(question);
+										}}
 									/>
 									{errors.description && touched.description && (
 										<div>{errors.description}</div>
@@ -135,6 +138,7 @@ function ModalInsertSurvey(props) {
 												required
 												onChange={(ev) => setMin(ev.target.value)}
 											>
+												<option value="0">0</option>
 												<option value="1">1</option>
 												<option value="2">2</option>
 												<option value="3">3</option>
@@ -157,6 +161,7 @@ function ModalInsertSurvey(props) {
 													setShowAnswer(true);
 												}}
 											>
+												<option value="0">0</option>
 												<option value="1">1</option>
 												<option value="2">2</option>
 												<option value="3">3</option>
@@ -205,12 +210,17 @@ function ModalInsertSurvey(props) {
 									: answers.map((item, index) => (
 											<Form.Group>
 												<Form.Label>Insert the answer </Form.Label>
-												<Form.Control 
+												<Form.Control
 													name="answer"
 													required
 													placeholder="Insert your answer"
 													type="string"
-													onChange={(ev) => setGenAnswers([...genAnswers.slice(0, index), ev.target.value])}
+													onChange={(ev) =>
+														setGenAnswers([
+															...genAnswers.slice(0, index),
+															ev.target.value,
+														])
+													}
 												/>
 											</Form.Group>
 									  ))}

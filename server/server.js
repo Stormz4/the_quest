@@ -80,7 +80,8 @@ const isLoggedIn = (req, res, next) => {
  * GET /api/surveys/admin
  * 		retrieves all the surveys made by an admin, using the session cookie
  * 
- * 
+ * POST /api/surveys
+ * 		insert a survey for a given admin
  * 
  * 
  * POST /api/login
@@ -115,6 +116,28 @@ app.get("/api/surveys/admin", isLoggedIn, async (req, res) => {
 		.then((surveys) => res.json(surveys))
 		.catch(() => res.status(500).json("Database unreachable"));
 });
+
+
+app.post(
+	"/api/surveys",
+	[check("title").isString(), check("question").isObject()],
+	isLoggedIn,
+	async (req, res) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(422).json({ errors: errors.array() });
+		}
+		try {
+			await dao.createSurvey(title, req.user.id, questions);
+			res.status(201).end();
+		} catch (err) {
+			console.log(err);
+			res.status(503).json({
+				error: `Database error during the creation of the survey.`,
+			});
+		}
+	}
+);
 
 //login
 app.post('/api/login',[

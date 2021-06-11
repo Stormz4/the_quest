@@ -28,6 +28,25 @@ async function getAllSurveysById() {
 	}
 }
 
+async function addSurvey(title, questions){
+	let url = BASEURL+"/surveys";
+	console.log(typeof(questions), questions)
+	console.log(questions[0])
+	console.log(questions[1]);
+    try{
+        const res = await axios.post(url,{ 
+            title: title,
+			questions:questions
+            }
+        );
+        return res;
+    }catch(error) {
+            console.log(error);
+            alert("Si è verificato un errore, riprova.");
+     };
+}
+
+
 async function login(credentials) {
     console.log(JSON.stringify(credentials));
     let response = await fetch("/api/login", {
@@ -72,6 +91,7 @@ const API = {
 	login,
 	logout,
 	getAdminInfo,
-	getAllSurveysById
+	getAllSurveysById,
+	addSurvey
 };
 export default API;
