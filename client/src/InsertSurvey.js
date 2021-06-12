@@ -15,6 +15,7 @@ function InsertSurvey(props) {
     const [type, setType] = useState(-1)
     const [question, setQuestion] = useState([])
 	const [title, setTitle] = useState("")
+	const [redirect, setRedirect] = useState(false)
 
     function renderQuestions() {
 		if ( question && question.length > 0) {
@@ -38,7 +39,7 @@ function InsertSurvey(props) {
 				console.log(res)
 				setShow(false);
 				setType(-1);
-				return <Redirect to="/" />
+				setRedirect(true);
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -56,7 +57,10 @@ function InsertSurvey(props) {
 		}
 
 	}
+	if (redirect)
+		return <Redirect to="/" />;
 
+		
     return (
 			<Container
 				fluid

@@ -8,10 +8,8 @@ function ModalAnswerSheet(props) {
 	const [name, setName] = useState("");
 	let surveyQuestions = props.survey;
 	let survey = props.item;
-	console.log(survey);
 	const handleClose = () => {
 		props.setShow(false);
-		props.setSurvey({r:""})
 	};
 
 	const renderForm = () => {

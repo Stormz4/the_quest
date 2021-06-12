@@ -43,6 +43,7 @@ function ModalInsertSurvey(props) {
 		setMin(0)
 		setMax(0)
 		setMaxChar(0)
+		setRequired(false)
 		setShowAnswer(false)
 		setAnswers([]);
 		setGenAnswers([]);
@@ -76,7 +77,7 @@ function ModalInsertSurvey(props) {
 			}
 
 			let newQuestion = [...props.question, questionComplete];
-
+			console.log(questionComplete)
 			props.setQuestion(newQuestion);
 			handleClose();
 		} else {

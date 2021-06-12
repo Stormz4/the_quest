@@ -13,7 +13,8 @@ function AnswerSheetRow(props) {
 	const [checksMade, setChecks] = useState(0)
 
 	const handleCheck = (c, value) => {
-		console.log("Checks made until now:" ,c, value)
+		// If the checksMade will be > max or <=min, I won't submit the check (res = false)
+		// Otherwise, I won't do a rollback
 		let res=true;
 		if (value){
 			// checked, must verify if we're below the max
@@ -38,13 +39,12 @@ function AnswerSheetRow(props) {
 				res = false;
 			}
 		}
-		
-		console.log("Checks made after:", c)
+
 		return res;
 	}
     const renderOptions = (opt) =>{
-        console.log(opt)
-		console.log("AO", id)
+
+		// I will filter the array, removing all the null options and maintaining only the options that have the same ref_q as the questions
         opt = opt.filter((item) => item != null);
         opt = opt.filter((item) => item.ref_q = id);
         console.log("OPT: ", opt)

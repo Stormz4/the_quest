@@ -124,12 +124,13 @@ app.get(
 	"/api/surveys/id=:id",
 	[check("id").isInt({ min: 0 })],
 	async (req, res) => {
-		console.log(req.params.id);
-
-		await dao
-			.getSurveyById(req.params.id)
-			.then((survey) => res.json(survey))
-			.catch(() => res.status(500).json("Database unreachable"));
+		try{
+			let survey = await dao.getSurveyById(req.params.id);
+			console.log("SURVEY:" ,survey)
+			res.json(survey)
+		}catch(err){
+			res.status(500).end()
+		}
 	}
 );
 

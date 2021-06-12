@@ -48,7 +48,7 @@ exports.getAdminById = (id) => {
 
 exports.getAllSurveys = () => {
 	return new Promise((resolve, reject) => {
-		const sql = "SELECT * FROM survey S, admin A WHERE S.ref_A = A.id";
+		const sql = "SELECT S.id, S.title, A.name FROM survey S, admin A WHERE S.ref_A = A.id";
 		db.all(sql, [], (err, rows) => {
 			if (err) {
 				reject(err);
@@ -78,18 +78,11 @@ exports.createSurvey = (title, admin, questions) => {
 				return;
 			}
 			let idS = this.lastID;
-			console.log(this.lastID)
-			console.log(questions);
-			console.log("PROVAPROVAPROVA")
 			for (let i = 0; i < questions.length; i++) {
 				const sql2 =
 					"INSERT INTO question (ref_s, question, min, max, open, required) VALUES (?, ?, ?, ?, ?, ?)";
-				console.log("DB GOIN")
-				console.log(questions[i].question)
 					db.run(
-					sql2,
-					[
-						idS,
+					sql2,[idS,
 						questions[i].question,
 						questions[i].min,
 						questions[i].max,
@@ -98,53 +91,40 @@ exports.createSurvey = (title, admin, questions) => {
 					],
 					function (err) {
 						if (err) {
-							console.log("addio tensing")
 							reject(err);
 							return;
 						}
-						console.log("CI SIAMO? ", idQ)
 						let idQ = this.lastID;
-						if (questions[i].answers != null) {
+						console.log("PROVA QUESTION");
+						console.log(questions)
+						console.log(questions[i])
+						if (questions[i] != undefined && questions[i].answers != null && questions[i].answers!=undefined) {
+
 							const sql3 =
 								"INSERT INTO option(ref_q, option_text) VALUES (?, ?)";
-							const sql4 =
-								"INSERT INTO answer(ref_q, answer_text, ref_as, ref_op) VALUES (?,?,?,?)";
-							for (let i = 0; i < questions[i].answers.length; i++) {
-								db.run(sql3, [idQ, questions[i].answers[i]], function (err) {
+							console.log(questions[i].answers)
+							
+							for (let j = 0; j < questions[i].answers.length; j++) {
+								db.run(sql3, [idQ, questions[i].answers[j]], function (err) {
 									if (err) {
 										reject(err);
 										return;
 									}
-									let idOP = this.lastID;
-									db.run(sql4, [idQ, "", null, idOP], function (err) {
-										if (err) {
-											reject(err);
-											return;
-										}
-									});
+									resolve(idS);
 								});
 							}
-						} else {
-							const sql3 =
-								"INSERT INTO answer(ref_q, answer_text, ref_as, ref_op) VALUES (?,?,?,?)";
-							db.run(sql3, [idQ, "", null, null], function (err) {
-								if (err) {
-									reject(err);
-									return;
-								}
-							});
 						}
 					}
 				);
 			}
-			resolve(idS);
+			//resolve(idS);
 		});
 	});
 };
 
 exports.getSurveyById = (id) => {
 	return new Promise((resolve, reject) => {
-		console.log("PROVA: ",id)
+
 		// Obtain all the questions for a given Survey
 		const sql =
 			"SELECT * FROM question Q WHERE Q.ref_s = ?";
@@ -153,19 +133,15 @@ exports.getSurveyById = (id) => {
 				reject(err);
 				return;
 			}
-			console.log(rows);
 			let idQ;
 			let survey;
 			let options = [];
 			let i=0;
 			let forward=true;
 			while (i<rows.length){
-				console.log("CURR:", i+1,  rows[i], rows[i].open);
-				
 				if (rows[i].open == 1)
 					options.push(null)
 				else if (rows[i].open == 0){
-					console.log("ID_Q:" ,rows[i].id)
 					idQ = rows[i].id;
 					const sql2 = "SELECT * FROM option O WHERE O.ref_q = ?"
 					db.all(sql2, [idQ], (err, rows2) => {
@@ -173,10 +149,8 @@ exports.getSurveyById = (id) => {
 							reject(err);
 							return;
 						}
-						console.log("AO", rows2)
 						options.push(rows2);
 
-						console.log("VRIMM:", options);
 						survey = rows.map((e) => ({
 								id: e.id,
 								question: e.question,
@@ -186,7 +160,7 @@ exports.getSurveyById = (id) => {
 								required: e.required,
 								options: options,
 						}));
-						console.log("***********************", survey[0].options);
+						console.log("AOOOO", survey)
 						resolve(survey);
 					});
 				}
@@ -194,6 +168,7 @@ exports.getSurveyById = (id) => {
 			}
 
 		});
+
 	});
 };
 

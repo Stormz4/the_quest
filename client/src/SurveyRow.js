@@ -5,7 +5,7 @@ import API from "./API";
 
 function SurveyRow(props) {
 	const [show, setShow] = useState(false);
-	console.log(props);
+	console.log("PROP:",props)
 
 	const handleSurvey = async (id) => {
 		const getSurveyById = async (id) => {
