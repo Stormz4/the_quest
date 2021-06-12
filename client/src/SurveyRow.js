@@ -1,36 +1,38 @@
 import { useState } from "react";
 import { Form, Col, Row, ListGroup, Button } from "react-bootstrap";
-import ModalForm from "./ModalForm";
+import ModalAnswerSheet from "./ModalAnswerSheet";
 import API from "./API";
 
-function QuestionaryRow(props) {
-    const [show, setShow] = useState(false);
-	console.log(props)
+function SurveyRow(props) {
+	const [show, setShow] = useState(false);
+	console.log(props);
 
-	const handleSurvey = async (id) =>{
-		const getSurveyById = async(id) => {
+	const handleSurvey = async (id) => {
+		const getSurveyById = async (id) => {
 			const survey = await API.getSurveyById(id);
+			console.log("SURVEY:" ,survey)
 			props.setSurvey(survey);
-		}
+		};
 
-		getSurveyById(id).then(()=>{
-			console.log(props.survey)
-			setShow(true)
-		})
-	}
+		getSurveyById(id).then(() => {
+			setShow(true);
+		});
+	};
 
 	return (
 		<ListGroup.Item className="container-fluid bg-light ">
 			<Row>
 				<Col lg={10} className="m-0 p-0">
 					<h2>{props.item.title}</h2>
-					<h8><i>made by {props.item.adminName}</i></h8>
+					<h8>
+						<i>made by {props.item.adminName}</i>
+					</h8>
 				</Col>
 				<Col lg={2} className="m-0 p-0">
 					<Button
 						variant="outline-success"
 						onClick={() => {
-							handleSurvey(props.item.id); 
+							handleSurvey(props.item.id);
 						}}
 					>
 						<svg
@@ -47,9 +49,19 @@ function QuestionaryRow(props) {
 					</Button>
 				</Col>
 			</Row>
-			{props.survey ? (<ModalForm show={show} setShow={setShow} item={props.item} survey={props.survey}></ModalForm>) : ("")}
+			{props.survey ? (
+				<ModalAnswerSheet
+					show={show}
+					setShow={setShow}
+					item={props.item}
+					survey={props.survey}
+					setSurvey={props.setSurvey}
+				></ModalAnswerSheet>
+			) : (
+				""
+			)}
 		</ListGroup.Item>
 	);
 }
 
-export default QuestionaryRow;
+export default SurveyRow;

@@ -1,28 +1,23 @@
 import { Button, Modal, Form, Col } from "react-bootstrap";
 import { useState } from "react";
-import { Formik } from "formik";
+import { Formik, FieldArray } from "formik";
 import API from "./API";
 import AnswerSheetRow from "./AnswerSheetRow";
 
-function ModalForm(props) {
+function ModalAnswerSheet(props) {
 	const [name, setName] = useState("");
 	let surveyQuestions = props.survey;
 	let survey = props.item;
 	console.log(survey);
-	let i = 0;
-	let answers = [];
 	const handleClose = () => {
 		props.setShow(false);
-		survey = {};
-		answers = [];
-		i = 0;
+		props.setSurvey({r:""})
 	};
 
 	const renderForm = () => {
 		if (surveyQuestions != undefined) {
-			i++;
-			return surveyQuestions.map((item) => (
-				<AnswerSheetRow item={item}></AnswerSheetRow>
+			return surveyQuestions.map((item, index) => (
+				<AnswerSheetRow item={item} key={index}></AnswerSheetRow>
 			));
 		}
 	};
@@ -42,15 +37,16 @@ function ModalForm(props) {
 				<Modal.Body style={{ textAlign: "center" }}>
 					<Formik
 						initialValues={{
-							name: "",
+							answers: [""],
 						}}
 					>
-						{({ errors, touched, isValidating }) => (
+						{({ errors, touched }) => (
 							<Form
-								onSubmit={(values) => {
-									handleSubmit(values); // same shape as initial values
+								onSubmit={() => {
+									handleSubmit(); // same shape as initial values
 								}}
 							>
+								<FieldArray name="answers" />
 								{renderForm()}
 								<Modal.Footer className="justify-content-center ">
 									<Button variant="secondary" onClick={handleClose}>
@@ -69,4 +65,4 @@ function ModalForm(props) {
 	);
 }
 
-export default ModalForm;
+export default ModalAnswerSheet;

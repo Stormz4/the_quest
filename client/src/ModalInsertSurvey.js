@@ -2,7 +2,7 @@ import { Button, Modal, Form, Col, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { Formik } from "formik";
 import API from "./API";
-import QuestionaryRow from "./QuestionaryRow"
+import QuestionaryRow from "./SurveyRow"
 
 function ModalInsertSurvey(props) {
 	const [question, setQuestion] = useState();
@@ -97,12 +97,6 @@ function ModalInsertSurvey(props) {
 				</Modal.Header>
 				{errorMessage ? <Alert variant="danger">{errorMessage}</Alert> : ""}
 				<Modal.Body style={{ textAlign: "center" }}>
-					<Formik
-						initialValues={{
-							name: "",
-						}}
-					>
-						{({ errors, touched, isValidating }) => (
 							<Form
 								onSubmit={(values) => {
 									handleSubmit(values); // same shape as initial values
@@ -120,9 +114,6 @@ function ModalInsertSurvey(props) {
 											setQuestion(ev.target.value);
 										}}
 									/>
-									{errors.description && touched.description && (
-										<div>{errors.description}</div>
-									)}
 								</Form.Group>
 								{props.type ? (
 									<>
@@ -230,8 +221,6 @@ function ModalInsertSurvey(props) {
 									</Button>
 								</Modal.Footer>
 							</Form>
-						)}
-					</Formik>
 				</Modal.Body>
 			</Modal>
 		</>

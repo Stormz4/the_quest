@@ -4,7 +4,7 @@ import { Formik} from "formik";
 import API from "./API"
 import ModalInsertSurvey from "./ModalInsertSurvey";
 import InsertSurveyRow from "./InsertSurveyRow"
-import QuestionaryRow from "./QuestionaryRow"
+import QuestionaryRow from "./SurveyRow"
 import {
 	Redirect
 } from "react-router-dom";

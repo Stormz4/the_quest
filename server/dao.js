@@ -160,7 +160,7 @@ exports.getSurveyById = (id) => {
 			let i=0;
 			let forward=true;
 			while (i<rows.length){
-				console.log("CURR:", i,  rows[i], rows[i].open);
+				console.log("CURR:", i+1,  rows[i], rows[i].open);
 				
 				if (rows[i].open == 1)
 					options.push(null)
@@ -186,7 +186,7 @@ exports.getSurveyById = (id) => {
 								required: e.required,
 								options: options,
 						}));
-						console.log("***********************", survey);
+						console.log("***********************", survey[0].options);
 						resolve(survey);
 					});
 				}

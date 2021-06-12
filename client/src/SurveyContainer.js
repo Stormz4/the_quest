@@ -1,7 +1,7 @@
 import { Container, Col, Row, ListGroup} from "react-bootstrap";
-import QuestionaryRow from "./QuestionaryRow";
+import SurveyRow from "./SurveyRow";
 
-function QuestionaryContainer(props) {
+function SurveyContainer(props) {
     let surveyList = props.surveyList;
 
 
@@ -9,14 +9,14 @@ function QuestionaryContainer(props) {
         
 		if (surveyList && surveyList.length > 0) {
 			return surveyList.map((item) => (
-				<QuestionaryRow
+				<SurveyRow
 					surveyList={surveyList}
 					item={item}
 					key={item.id}
 					setDirty={props.setDirty}
 					survey={props.survey}
 					setSurvey={props.setSurvey}
-				></QuestionaryRow>
+				></SurveyRow>
 			));
         }
 
@@ -34,4 +34,4 @@ function QuestionaryContainer(props) {
 	);
 }
 
-export default QuestionaryContainer;
+export default SurveyContainer;

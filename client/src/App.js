@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import NavigationBar from "./NavigationBar.js";
 import Footer from "./Footer";
-import QuestionaryContainer from "./QuestionaryContainer";
+import SurveyContainer from "./SurveyContainer";
 import { useState, useEffect } from "react";
 import API from "./API"
 import InsertSurvey from "./InsertSurvey"
@@ -102,9 +102,7 @@ function App() {
 									>
 										{" "}
 									</Row>
-									<QuestionaryContainer
-										surveyList={surveyList}
-									></QuestionaryContainer>
+									<SurveyContainer surveyList={surveyList}></SurveyContainer>
 								</>
 							) : (
 								<Redirect to="/" />
@@ -200,11 +198,11 @@ function App() {
 													</svg>
 												</h2>
 											</Row>
-											<QuestionaryContainer
+											<SurveyContainer
 												surveyList={surveyList}
 												survey={survey}
 												setSurvey={setSurvey}
-											></QuestionaryContainer>
+											></SurveyContainer>
 										</Container>
 										<Footer></Footer>
 									</>

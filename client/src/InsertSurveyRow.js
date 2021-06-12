@@ -1,8 +1,5 @@
-import { useState } from "react";
+
 import { Form, Col, Row, ListGroup, Button } from "react-bootstrap";
-import ModalForm from "./ModalForm";
-import API from "./API";
-import { move } from "formik";
 
 function InsertSurveyRow(props) {
 
