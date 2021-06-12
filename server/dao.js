@@ -157,15 +157,14 @@ exports.getSurveyById = (id) => {
 			let idQ;
 			let survey;
 			let options = [];
-			for (let i=0; i<rows.length; i++){
-				console.log("CURR:", i,  rows[i]);
-
-				if (rows[i].open == 1){
-					// Non ho bisogno di prendere le option
-					
-					options.push(null);
-				}
-				else if(rows[i].open == 0){
+			let i=0;
+			let forward=true;
+			while (i<rows.length){
+				console.log("CURR:", i,  rows[i], rows[i].open);
+				
+				if (rows[i].open == 1)
+					options.push(null)
+				else if (rows[i].open == 0){
 					console.log("ID_Q:" ,rows[i].id)
 					idQ = rows[i].id;
 					const sql2 = "SELECT * FROM option O WHERE O.ref_q = ?"
@@ -175,21 +174,25 @@ exports.getSurveyById = (id) => {
 							return;
 						}
 						console.log("AO", rows2)
-						options.push(rows2)
+						options.push(rows2);
+
+						console.log("VRIMM:", options);
+						survey = rows.map((e) => ({
+								id: e.id,
+								question: e.question,
+								min: e.min,
+								max: e.max,
+								open: e.open,
+								required: e.required,
+								options: options,
+						}));
+						console.log("***********************", survey);
+						resolve(survey);
 					});
 				}
+				i++;
 			}
-			console.log("VRIMM:", options)
-			survey = rows.map((e) => ({
-				question: e.question,
-				min: e.min,
-				max: e.max,
-				open: e.open,
-				required: e.required,
-				options: options,
-			}));
-			console.log("***********************", survey)
-			resolve(survey);
+
 		});
 	});
 };

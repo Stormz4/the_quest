@@ -14,8 +14,8 @@ function QuestionaryRow(props) {
 		}
 
 		getSurveyById(id).then(()=>{
-			setShow(true);
 			console.log(props.survey)
+			setShow(true)
 		})
 	}
 
@@ -47,7 +47,7 @@ function QuestionaryRow(props) {
 					</Button>
 				</Col>
 			</Row>
-			<ModalForm show={show} setShow={setShow} item={props.item} survey={props.survey}></ModalForm>
+			{props.survey ? (<ModalForm show={show} setShow={setShow} item={props.item} survey={props.survey}></ModalForm>) : ("")}
 		</ListGroup.Item>
 	);
 }
