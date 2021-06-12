@@ -20,7 +20,6 @@ function AnswerSheetRow(props) {
 		});
         console.log("FLATTENED: ",merged)
         return merged.map((item)=>(
-            {console.log(item)}
             (<h1>Yes</h1>)
         ))
     };
