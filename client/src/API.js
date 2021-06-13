@@ -31,8 +31,6 @@ async function getSurveyById(id) {
 	let url = BASEURL + `/surveys/id=${id}`;
 	try {
 		const res = await axios.get(url);
-		console.log("PROVA: ",res);
-		console.log("PROVA2: ", res.data);
 		const data = await res.data;
 		return data;
 	} catch (error) {

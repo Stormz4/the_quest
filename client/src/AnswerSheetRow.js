@@ -4,7 +4,6 @@ import { Formik } from "formik";
 import API from "./API";
 
 function AnswerSheetRow(props) {
-	console.log("PROPS:" ,props);
 	let answers = [];
 	let max = props.item.max;
 	let min = props.item.min
@@ -45,14 +44,11 @@ function AnswerSheetRow(props) {
     const renderOptions = (opt) =>{
 
 		// I will filter the array, removing all the null options and maintaining only the options that have the same ref_q as the questions
+
         opt = opt.filter((item) => item != null);
-        opt = opt.filter((item) => item.ref_q = id);
-        console.log("OPT: ", opt)
-		let merged = opt.reduce(function (prev, next) {
-			return prev.concat(next);
-		});
-        console.log("FLATTENED: ",merged)
-        return merged.map((item)=>(
+        opt = opt.filter((item) => item.ref_q == id);
+
+        return opt.map((item)=>(
             (
 			<Form.Group >
 				<Form.Check type="checkbox" label={item.option_text} onChange={(ev)=> {
@@ -64,7 +60,7 @@ function AnswerSheetRow(props) {
 			</Form.Group>
 			)
 		))
-
+				
     };
 	return (
 		<>

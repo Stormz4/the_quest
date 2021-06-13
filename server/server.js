@@ -126,7 +126,6 @@ app.get(
 	async (req, res) => {
 		try{
 			let survey = await dao.getSurveyById(req.params.id);
-			console.log("SURVEY:" ,survey)
 			res.json(survey)
 		}catch(err){
 			res.status(500).end()

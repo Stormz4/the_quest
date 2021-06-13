@@ -128,7 +128,7 @@ exports.getSurveyById = (id) => {
 		// Obtain all the questions for a given Survey
 		
 		const sql =
-			"SELECT * FROM question Q WHERE Q.ref_s = ?";
+			"SELECT Q.id, Q.question, Q.min, Q.max, O.ref_q, Q.required, Q.open, O.option_text	 FROM question Q LEFT JOIN option O on O.ref_Q = Q.id  WHERE Q.ref_s = ?";
 			
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
@@ -139,35 +139,31 @@ exports.getSurveyById = (id) => {
 			let survey;
 			let options = [];
 			let i=0;
-			let forward=true;
-			while (i<rows.length){
-				if (rows[i].open == 1)
-					options.push(null)
-				else if (rows[i].open == 0){
-					idQ = rows[i].id;
-					const sql2 = "SELECT * FROM option O WHERE O.ref_q = ?"
-					db.all(sql2, [idQ], (err, rows2) => {
-						if (err) {
-							reject(err);
-							return;
-						}
-						options.push(rows2);
-
-						survey = rows.map((e) => ({
-								id: e.id,
-								question: e.question,
-								min: e.min,
-								max: e.max,
-								open: e.open,
-								required: e.required,
-								options: options,
-						}));
-						console.log("AOOOO", survey)
-						resolve(survey);
-					});
+			
+			for (i; i<rows.length; i++){
+				console.log(rows[i])
+				if (rows[i].open == 1){
+					options.push(null);
 				}
-				i++;
+					
+				else if (rows[i].open == 0) {
+					idQ = rows[i].id;
+					options.push({id: rows[i].id, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
+				}
 			}
+		
+			survey = rows.map((e) => ({
+						id: e.id,
+						question: e.question,
+						min: e.min,
+						ref_q: e.ref_q,
+						max: e.max,
+						open: e.open,
+						required: e.required,
+						options: options,
+			}));
+
+			resolve(survey);
 
 		});
 		
