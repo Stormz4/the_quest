@@ -54,7 +54,7 @@ function AnswerSheetRow(props) {
         console.log("FLATTENED: ",merged)
         return merged.map((item)=>(
             (
-			<Form.Group min={min} max={2} >
+			<Form.Group >
 				<Form.Check type="checkbox" label={item.option_text} onChange={(ev)=> {
 					let r = handleCheck(checksMade, ev.target.checked)
 					ev.target.checked=r;

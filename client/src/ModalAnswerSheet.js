@@ -7,23 +7,31 @@ import AnswerSheetRow from "./AnswerSheetRow";
 function ModalAnswerSheet(props) {
 	const [name, setName] = useState("");
 	let surveyQuestions = props.survey;
+	console.log("quest: ",surveyQuestions)
 	let survey = props.item;
+	// This will be used to count all the checkboxes that don't respect the minimun number
+	const [belowMin, setBelowMin] = useState(0);
+
 	const handleClose = () => {
 		props.setShow(false);
 	};
 
 	const renderForm = () => {
+		console.log("ALL THE QUESTIONS: ", surveyQuestions)
 		if (surveyQuestions != undefined) {
 			return surveyQuestions.map((item, index) => (
-				<AnswerSheetRow item={item} key={index}></AnswerSheetRow>
+				<AnswerSheetRow item={item} key={index} setBelowMin={setBelowMin}></AnswerSheetRow>
 			));
 		}
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-
-		handleClose();
+		if (belowMin == 0)
+			handleClose();
+		else{
+			alert("You have to respect the minimum limit in open questions.")
+		}
 		console.log("submit");
 	};
 	return (
@@ -44,7 +52,6 @@ function ModalAnswerSheet(props) {
 									handleSubmit(); // same shape as initial values
 								}}
 							>
-								<FieldArray name="answers" />
 								{renderForm()}
 								<Modal.Footer className="justify-content-center ">
 									<Button variant="secondary" onClick={handleClose}>

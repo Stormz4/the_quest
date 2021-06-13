@@ -126,8 +126,10 @@ exports.getSurveyById = (id) => {
 	return new Promise((resolve, reject) => {
 
 		// Obtain all the questions for a given Survey
+		
 		const sql =
 			"SELECT * FROM question Q WHERE Q.ref_s = ?";
+			
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
 				reject(err);
@@ -168,7 +170,7 @@ exports.getSurveyById = (id) => {
 			}
 
 		});
-
+		
 	});
 };
 
