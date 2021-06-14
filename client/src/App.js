@@ -151,7 +151,7 @@ function App() {
 												</Button>
 											</Link>{" "}
 										</Row>
-										<InsertSurvey surveyList={surveyList}></InsertSurvey>
+										<InsertSurvey setDirty={setDirty} surveyList={surveyList}></InsertSurvey>
 									</Container>
 								</>
 							) : (

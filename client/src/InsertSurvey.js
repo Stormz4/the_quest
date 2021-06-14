@@ -1,10 +1,8 @@
 import { Button, Modal, Form, Col, Container, Row, ListGroup} from "react-bootstrap";
 import { useState } from "react";
-import { Formik} from "formik";
 import API from "./API"
 import ModalInsertSurvey from "./ModalInsertSurvey";
 import InsertSurveyRow from "./InsertSurveyRow"
-import QuestionaryRow from "./SurveyRow"
 import {
 	Redirect
 } from "react-router-dom";
@@ -39,6 +37,7 @@ function InsertSurvey(props) {
 				console.log(res)
 				setShow(false);
 				setType(-1);
+				props.setDirty(true);
 				setRedirect(true);
 			})
 			.catch(function (error) {
@@ -57,8 +56,10 @@ function InsertSurvey(props) {
 		}
 
 	}
-	if (redirect)
-		return <Redirect to="/" />;
+	if (redirect){
+		alert("Success!")
+		return <Redirect to="/admin" />;
+	}
 
 		
     return (

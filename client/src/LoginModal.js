@@ -1,7 +1,6 @@
 import { Button, Modal, Form, Col, Row, Alert } from "react-bootstrap";
 import { useState } from "react";
-import { Formik } from "formik";
-import API from "./API";
+
 import {Redirect} from "react-router-dom";
 
 function LoginModal(props) {
@@ -46,12 +45,6 @@ function LoginModal(props) {
 				</Modal.Header>
 				{errorMessage ? <Alert variant="danger">{errorMessage}</Alert> : ""}
 				<Modal.Body style={{ textAlign: "center" }}>
-					<Formik
-						initialValues={{
-							description: "",
-						}}
-					>
-						{({ errors, touched, isValidating }) => (
 							<Form
 								onSubmit={(values) => {
 									handleLogin(values);
@@ -68,9 +61,6 @@ function LoginModal(props) {
 											type="email"
 											onChange={(ev) => setEmail(ev.target.value)}
 										/>
-										{errors.description && touched.description && (
-											<div>{errors.description}</div>
-										)}
 									</Form.Group>
 								</Row>
 								<Row lg={1} className="p-3 justify-content-md-center">
@@ -86,9 +76,6 @@ function LoginModal(props) {
 											type="password"
 											onChange={(ev) => setPassword(ev.target.value)}
 										/>
-										{errors.description && touched.description && (
-											<div>{errors.description}</div>
-										)}
 									</Form.Group>
 								</Row>
 								<Row lg={3} className="m-3 justify-content-md-center">
@@ -97,8 +84,6 @@ function LoginModal(props) {
 									</Button>
 								</Row>
 							</Form>
-						)}
-					</Formik>
 				</Modal.Body>
 			</Modal>
 		</>

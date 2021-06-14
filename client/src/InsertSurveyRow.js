@@ -1,5 +1,5 @@
 
-import { Form, Col, Row, ListGroup, Button } from "react-bootstrap";
+import { Col, Row, ListGroup, Button } from "react-bootstrap";
 
 function InsertSurveyRow(props) {
 

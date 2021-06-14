@@ -1,8 +1,5 @@
-import { Button, Modal, Form, Col, Alert } from "react-bootstrap";
+import { Button, Modal, Form, Alert } from "react-bootstrap";
 import { useState } from "react";
-import { Formik } from "formik";
-import API from "./API";
-import QuestionaryRow from "./SurveyRow"
 
 function ModalInsertSurvey(props) {
 	const [question, setQuestion] = useState();
@@ -23,12 +20,9 @@ function ModalInsertSurvey(props) {
 
 	function generateAnswer(nAnswers){
 
-		console.log(max)
-		console.log(nAnswers)
-		console.log(showAnswer)
 		let arr = [];
 		if (max>0 && max <= nAnswers){
-			for (let i=0; i<max; i++){
+			for (let i=0; i<nAnswers; i++){
 				arr.push("")
 			}
 			console.log(arr)
@@ -60,8 +54,7 @@ function ModalInsertSurvey(props) {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		console.log(max)
-		console.log(nAns)
+
 		if ((min <= max) && (max <= nAns)) {
 			let questionComplete;
 			if (props.type == 1) {

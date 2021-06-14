@@ -148,7 +148,7 @@ exports.getSurveyById = (id) => {
 					
 				else if (rows[i].open == 0) {
 					idQ = rows[i].id;
-					options.push({id: rows[i].id, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
+					options.push({index: i, id: rows[i].id, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
 				}
 			}
 		

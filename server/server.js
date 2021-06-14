@@ -136,10 +136,52 @@ app.get(
 
 app.post(
 	"/api/surveys",
-	[check("title").isString(), check("questions").isArray()],
+	[check("title").isString(), 
+	check("questions").custom(questions =>{
+		let isValid = true;
+		if (questions.length === 0){
+			throw new Error("Questions must contain at least 1 question.")
+		}
+		for (const question of questions) {
+			console.log("DOMANDA:" ,question)
+			//!variable -> variable == null && variable == undefined, not usable if a var can be 0
+			if (!question.question || question.open === null || question.open === undefined || !question.max ){
+				console.log("Crasho 1")
+				isValid = false;
+				break;
+			}
+			
+			if (question.open == 1){
+				if (question.min != null || question.required === null || question.required === undefined 
+					|| question.answers != null || question.max < 0 || question.max > 200){
+					console.log("Crasho 2");
+					isValid = false;
+					break;
+				}
+			}
+			else{
+				if (question.required != null || !question.answers || question.min === null || 
+					question.min===undefined || question.min < 0 || question.max > 10 || question.answers.length > 10){
+					console.log("Crasho 3");
+					isValid = false;
+					break;
+				}
+			}
+		}
+		if (!isValid){
+			throw new Error("An error has been found.")
+		}
+		else{
+			return true;
+		}
+	})
+
+
+	],
 	isLoggedIn,
 	async (req, res) => {
 		const errors = validationResult(req);
+		console.log("BODY:" , req.body)
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: errors.array() });
 		}

@@ -40,9 +40,7 @@ async function getSurveyById(id) {
 
 async function addSurvey(title, questions){
 	let url = BASEURL+"/surveys";
-	console.log(typeof(questions), questions)
-	console.log(questions[0])
-	console.log(questions[1]);
+	console.log(questions)
     try{
         const res = await axios.post(url,{ 
             title: title,
@@ -54,6 +52,22 @@ async function addSurvey(title, questions){
             console.log(error);
             alert("Si è verificato un errore, riprova.");
      };
+}
+
+async function submitAnswers(answers, survey) {
+	let url = BASEURL + "/surveys/submit";
+	console.log("answers:" ,answers);
+	console.log("survey:", survey)
+	try {
+		const res = await axios.post(url, {
+			answers: answers,
+			survey: survey,
+		});
+		return res;
+	} catch (error) {
+		console.log(error);
+		alert("Si è verificato un errore, riprova.");
+	}
 }
 
 
@@ -103,6 +117,7 @@ const API = {
 	getAdminInfo,
 	getAllSurveysById,
 	addSurvey,
-	getSurveyById
+	getSurveyById,
+	submitAnswers
 };
 export default API;
