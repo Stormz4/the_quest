@@ -10,7 +10,6 @@ const db = new sqlite.Database("surveys.db", (err) => {
 });
 
 exports.getAdmin = (email, password) => {
-	console.log(email);
 	return new Promise((resolve, reject) => {
 		const sql = "SELECT * FROM admin WHERE email = ?";
 
@@ -60,7 +59,6 @@ exports.getAllSurveys = () => {
 				title: e.title,
 				adminName: e.name,
 			}));
-			console.log(surveys);
 			resolve(surveys);
 		});
 
@@ -94,13 +92,10 @@ exports.createSurvey = (title, admin, questions) => {
 							return;
 						}
 						let idQ = this.lastID;
-						console.log(questions)
-						console.log(questions[i])
 						if (questions[i] != undefined && questions[i].answers != null && questions[i].answers!=undefined) {
 
 							const sql3 =
 								"INSERT INTO option(ref_q, option_text) VALUES (?, ?)";
-							console.log(questions[i].answers)
 							
 							for (let j = 0; j < questions[i].answers.length; j++) {
 								db.run(sql3, [idQ, questions[i].answers[j]], function (err) {
@@ -193,25 +188,54 @@ exports.getSurveyById = (id) => {
 };
 
 exports.getAllSurveysById = (id) => {
-	console.log("USER:");
-	console.log(id);
+
 	return new Promise((resolve, reject) => {
-		const sql =
-			"SELECT * FROM survey S, admin A WHERE A.id = ? AND S.ref_A = A.id ";
+		const sql = `SELECT S.id, S.title, A.name, count(A2.id) AS n_submissions 
+			FROM admin A, survey S 
+			LEFT JOIN answer_sheet A2 on A2.ref_s = S.id 
+			WHERE A.id = ? AND S.ref_A = A.id GROUP BY S.id`;
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
 				reject(err);
 				return;
 			}
-			console.log(rows);
 			const surveys = rows.map((e) => ({
 				id: e.id,
 				title: e.title,
 				adminName: e.name,
+				n_submissions: e.n_submissions
 			}));
 
+			
 			resolve(surveys);
 		});
 	});
 };
 
+exports.getAnswerSheetsById = (id) => {
+	return new Promise((resolve, reject) => {
+		// Obtain all the questions for a given Survey
+		console.log("SI")
+		const sql =
+			"SELECT A.id, A.ref_as, A.answer_text, A.ref_q, A2.name, A2.ref_s FROM answer A, answer_sheet A2 WHERE A2.ref_s = ? AND A.ref_as = A2.id";
+
+		db.all(sql, [id], (err, rows) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			
+			const answers = rows.map((e) => ({
+				id: e.id,
+				ref_as: e.ref_as,
+				answer_text: e.answer_text,
+				ref_q: e.ref_q,
+				name: e.name,
+				ref_s: e.ref_s
+			}));
+
+			console.log(answers)
+			resolve(answers);
+		});
+	});
+};

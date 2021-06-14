@@ -8,14 +8,16 @@ function SurveyContainer(props) {
 	function renderQuests() {
         
 		if (surveyList && surveyList.length > 0) {
-			return surveyList.map((item) => (
+			return surveyList.map((item, index) => (
 				<SurveyRow
 					surveyList={surveyList}
 					item={item}
+					index={index}
 					key={item.id}
 					setDirty={props.setDirty}
 					survey={props.survey}
 					setSurvey={props.setSurvey}
+					loggedIn={props.loggedIn}
 				></SurveyRow>
 			));
         }

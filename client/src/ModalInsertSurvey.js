@@ -25,7 +25,6 @@ function ModalInsertSurvey(props) {
 			for (let i=0; i<nAnswers; i++){
 				arr.push("")
 			}
-			console.log(arr)
 			setAnswers(arr);
 
 		}
@@ -78,7 +77,6 @@ function ModalInsertSurvey(props) {
 			}
 
 			let newQuestion = [...props.question, questionComplete];
-			console.log(questionComplete);
 			props.setQuestion(newQuestion);
 			handleClose();
 		} else {

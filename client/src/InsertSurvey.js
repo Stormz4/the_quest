@@ -34,7 +34,6 @@ function InsertSurvey(props) {
 
 		let res = API.addSurvey(titleToAdd, questionsToAdd)
 		.then(() => {
-				console.log(res)
 				setShow(false);
 				setType(-1);
 				props.setDirty(true);

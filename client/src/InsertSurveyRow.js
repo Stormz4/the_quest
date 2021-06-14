@@ -13,7 +13,6 @@ function InsertSurveyRow(props) {
 			let tmp = q[props.id];
 			q[props.id] = q[props.id-1]
 			q[props.id-1] = tmp;
-			console.log(q)
 			props.setQuestion(q)
 		}
 	}
@@ -34,9 +33,7 @@ function InsertSurveyRow(props) {
 
 	const handleDelete = () =>{
 		let q = [...props.question];
-		console.log(q)
 		q.splice(props.id, 1);
-		console.log(q);
 		props.setQuestion(q);
 	}
 

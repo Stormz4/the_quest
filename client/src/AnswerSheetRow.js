@@ -7,6 +7,30 @@ function AnswerSheetRow(props) {
     let open = props.item.open;
     let id = props.item.id;
 	let index = props.index;
+	if (props.answersSheet != undefined){
+
+	}
+
+	const evaluateCheck =(item) =>{
+		if (props.answersSheet != undefined){
+			for(const answer of props.answersSheet[1]){
+				if (answer.answer_text === item.option_text)
+					return true;
+				}
+		return false;
+		}
+	}
+
+	const evaluatePlaceholder = () =>{
+		if (props.answersSheet != undefined){
+			for(const answer of props.answersSheet[1]){
+				if (answer.ref_q === id){
+					return answer.answer_text;
+				}
+			}
+		}
+		else return "Insert your answer."
+	}
 
     const renderOptions = (opt) =>{
 
@@ -19,9 +43,9 @@ function AnswerSheetRow(props) {
             (
 			<Form.Group >
 				<Form.Check type="checkbox" value={props.answers} 
-					
+					readOnly={props.loggedIn}
+					checked={evaluateCheck(item)}
 					label={item.option_text} onChange={(ev)=> {
-						console.log("ITEM: ",item)
 						if (ev.target.checked == true){
 							// Add the option
 							let arr = [
@@ -58,29 +82,26 @@ function AnswerSheetRow(props) {
 					<Form.Label>{props.item.question}</Form.Label>
 					<Form.Control
 						name="answers"
-						placeholder="Walk around"
+						readOnly={props.loggedIn}
+						placeholder={evaluatePlaceholder()}
 						// YET TO PUT THE MAX
 						type="text"
 						maxLength={props.item.max}
 						required={props.item.required}
 						onChange={(ev) => {
-
 							let arr = [
 								...props.answers,
 								{ id_question: id, answer: ev.target.value, open: 1 },
 							];
-							for (let i = 0; i < arr.length-1; i++) {
+							for (let i = 0; i < arr.length - 1; i++) {
 								// Verifify if there is another answer with the same ID
-								if ( arr[i].id_question === id) {
+								if (arr[i].id_question === id) {
 									arr.splice(i, 1);
 									break;
 								}
 							}
 							props.setAnswers(arr);
-							
-
-							}
-						}
+						}}
 					/>
 					<Form.Text className="text-muted">Max characters: {max}</Form.Text>
 				</Form.Group>

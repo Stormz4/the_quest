@@ -112,8 +112,6 @@ app.get('/api/surveys', async (req, res) => {
 });
 
 app.get("/api/surveys/admin", isLoggedIn, async (req, res) => {
-	console.log(req.user.id);
-
 	await dao
 		.getAllSurveysById(req.user.id)
 		.then((surveys) => res.json(surveys))
@@ -132,6 +130,21 @@ app.get(
 		}
 	}
 );
+
+app.get(
+	"/api/answers/id=:id",
+	[check("id").isInt({ min: 0 })], isLoggedIn,
+	async (req, res) => {
+		try {
+			console.log("AOOOO", req.params.id)
+			let answers = await dao.getAnswerSheetsById(req.params.id);
+			res.json(answers);
+		} catch (err) {
+			res.status(500).end();
+		}
+	}
+);
+
 
 
 app.post(
@@ -199,6 +212,14 @@ app.post(
 	"/api/surveys/submit",
 	[
 		check("name").isString(),
+		check("answers").custom((answers)=> {
+			for (const answer of answers){
+				if (answer.id_question <= 0 || !answer.id_question || !answer.answer || answer.answer.length <= 0
+					 || answer.open === null || answer.open===undefined || answer.open > 1 || answer.open <0 )
+					throw new Error ("An error has been found. Try again");
+			}
+			return true;
+		}),
 		check("survey").custom((survey) => {
 			if (survey.id <= 0){
 				throw new Error("Id is not a valid int");

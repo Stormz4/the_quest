@@ -15,11 +15,9 @@ function LoginModal(props) {
     const handleLogin = (event) => {
 		event.preventDefault();
         setErrorMessage('');
-        console.log("hello");
 
 		let email = emailNoCase.toLowerCase();
         const credentials = {email, password};
-        console.log(credentials)
         let valid = true;
         if(email === '' || password === '' || password.length < 6)
             valid = false;

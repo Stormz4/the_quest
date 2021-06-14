@@ -5,25 +5,45 @@ import API from "./API";
 
 function SurveyRow(props) {
 	const [show, setShow] = useState(false);
+	const [answersSheet, setAnswersSheet] = useState([])
 
+	console.log("SURVEY: ", props.surveyList)
 	const handleSurvey = async (id) => {
 		const getSurveyById = async (id) => {
 			const survey = await API.getSurveyById(id);
-			console.log("SURVEY:", survey);
-
+	
 			// If a question is open, it will be present multiple times.
 			// I remove in this case all the rows that contain a duplicated id
 			// filter((element, index, array) => { ... } )
 			let s2 = survey.filter(
 				(element, index, array) => array.findIndex((t) => t.id === element.id) === index
 			);
-			console.log(s2)
 			props.setSurvey(s2);
 		};
 
-		getSurveyById(id).then(() => {
-			setShow(true);
-		});
+		const getAnswerSheetsById = async (id) => {
+			const answersSheet = await API.getAnswerSheetsById(id);
+
+			// reduce((accumulator, currentValue) => { ... } )
+			let arr = answersSheet.reduce((acc, currVal) => {
+				acc[currVal.ref_as] = [...(acc[currVal.ref_as] || []), currVal];
+				return acc;
+			}, {});
+			// group the array by differents values of ref_answer sheet
+
+			setAnswersSheet(Object.entries(arr))
+
+		};
+
+		if (props.loggedIn){
+			getAnswerSheetsById(id).then(()=> {
+				setShow(true);
+			});
+		}
+			getSurveyById(id).then(() => {
+				setShow(true);
+			});
+		
 	};
 
 	return (
@@ -33,6 +53,7 @@ function SurveyRow(props) {
 					<h2>{props.item.title}</h2>
 					<h8>
 						<i>made by {props.item.adminName}</i>
+						{props.loggedIn ? (<i>, compiled by: {props.surveyList[props.index].n_submissions} persons</i>) : ("")}
 					</h8>
 				</Col>
 				<Col lg={2} className="m-0 p-0">
@@ -63,6 +84,9 @@ function SurveyRow(props) {
 					item={props.item}
 					survey={props.survey}
 					setSurvey={props.setSurvey}
+					loggedIn={props.loggedIn}
+					answersSheet={answersSheet}
+					setAnswersSheet={setAnswersSheet}
 				></ModalAnswerSheet>
 			) : (
 				""

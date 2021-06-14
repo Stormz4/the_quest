@@ -38,9 +38,20 @@ async function getSurveyById(id) {
 	}
 }
 
+
+async function getAnswerSheetsById(id) {
+	let url = BASEURL + `/answers/id=${id}`;
+	try {
+		const res = await axios.get(url);
+		const data = await res.data;
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 async function addSurvey(title, questions){
 	let url = BASEURL+"/surveys";
-	console.log(questions)
     try{
         const res = await axios.post(url,{ 
             title: title,
@@ -56,9 +67,6 @@ async function addSurvey(title, questions){
 
 async function submitAnswers(answers, survey, name) {
 	let url = BASEURL + "/surveys/submit";
-	console.log("answers:" ,answers);
-	console.log("survey:", survey)
-	console.log("name: ", name)
 	try {
 		const res = await axios.post(url, {
 			answers: answers,
@@ -120,6 +128,7 @@ const API = {
 	getAllSurveysById,
 	addSurvey,
 	getSurveyById,
-	submitAnswers
+	submitAnswers,
+	getAnswerSheetsById
 };
 export default API;

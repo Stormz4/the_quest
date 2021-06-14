@@ -28,7 +28,6 @@ function App() {
 			//if (filter === 0) { };
 			setLoggedIn(true);
 			setDirty(true);
-			console.log(userInfo);
 			alert(`Welcome, ${userInfo.name}!`);
 			return true; 
 		} catch (err) {
@@ -96,13 +95,26 @@ function App() {
 										logout={logout}
 										loggedIn={loggedIn}
 									></NavigationBar>{" "}
-									<Row
-										className="justify-content-center text-light"
-										style={{ backgroundColor: "seagreen" }}
+									<Container
+										fluid
+										className="min-vh-100 App bg-light"
+										style={{ marginLeft: 0, marginRight: 0, padding: 0 }}
 									>
-										{" "}
-									</Row>
-									<SurveyContainer surveyList={surveyList}></SurveyContainer>
+										<Row
+											className="justify-content-center text-light"
+											style={{ backgroundColor: "seagreen" }}
+										>
+											{" "}
+											<h2>Welcome!</h2>{" "}
+										</Row>
+										<SurveyContainer
+											loggedIn={loggedIn}
+											survey={survey}
+											setSurvey={setSurvey}
+											surveyList={surveyList}
+										></SurveyContainer>
+									</Container>
+									<Footer></Footer>
 								</>
 							) : (
 								<Redirect to="/" />
@@ -151,7 +163,10 @@ function App() {
 												</Button>
 											</Link>{" "}
 										</Row>
-										<InsertSurvey setDirty={setDirty} surveyList={surveyList}></InsertSurvey>
+										<InsertSurvey
+											setDirty={setDirty}
+											surveyList={surveyList}
+										></InsertSurvey>
 									</Container>
 								</>
 							) : (
