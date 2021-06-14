@@ -84,7 +84,6 @@ function AnswerSheetRow(props) {
 						name="answers"
 						readOnly={props.loggedIn}
 						placeholder={evaluatePlaceholder()}
-						// YET TO PUT THE MAX
 						type="text"
 						maxLength={props.item.max}
 						required={props.item.required}
@@ -103,7 +102,7 @@ function AnswerSheetRow(props) {
 							props.setAnswers(arr);
 						}}
 					/>
-					<Form.Text className="text-muted">Max characters: {max}</Form.Text>
+					<Form.Text className="text-muted">Max characters: {max}. {props.item.required ? (<i>This question is required.</i>) : ("")}</Form.Text>
 				</Form.Group>
 			) : (
 				<Form.Group>

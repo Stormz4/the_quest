@@ -165,7 +165,12 @@ function ModalAnswerSheet(props) {
 												Go back
 											</Button>
 
-											<Button variant="info" className="ml-0 p-2">
+											<Button
+												variant="info"
+												className="ml-0 p-2"
+												disabled={indexSheet == props.answersSheet.length-1}
+												onClick={() => setIndex(indexSheet + 1)}
+											>
 												Go forward
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
@@ -174,10 +179,6 @@ function ModalAnswerSheet(props) {
 													fill="currentColor"
 													class="bi bi-arrow-bar-right"
 													viewBox="0 0 16 16"
-													disabled = {indexSheet == props.answersSheet.length}
-													onClick={() => 
-														setIndex(indexSheet + 1)
-													}
 												>
 													<path
 														fill-rule="evenodd"

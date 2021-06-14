@@ -53,12 +53,20 @@ function SurveyRow(props) {
 					<h2>{props.item.title}</h2>
 					<h8>
 						<i>made by {props.item.adminName}</i>
-						{props.loggedIn ? (<i>, compiled by: {props.surveyList[props.index].n_submissions} persons</i>) : ("")}
+						{props.loggedIn ? (
+							<i>
+								, compiled by: {props.surveyList[props.index].n_submissions}{" "}
+								persons
+							</i>
+						) : (
+							""
+						)}
 					</h8>
 				</Col>
 				<Col lg={2} className="m-0 p-0">
 					<Button
 						variant="outline-success"
+						disabled={props.surveyList[props.index].n_submissions==0}
 						onClick={() => {
 							handleSurvey(props.item.id);
 						}}

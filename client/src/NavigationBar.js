@@ -33,8 +33,12 @@ function NavigationBar (props) {
 						<div className="mr-1">
 							{props.loggedIn ? (
 								<>
-									<Link to="/insert">
-										<Button variant="success" className="ml-0 p-2">
+									<Link to="/insert" style={{ textDecoration: "none" }}>
+										<Button
+											href="/insert"
+											variant="success"
+											className="ml-0 p-2"
+										>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												width="32"
