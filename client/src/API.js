@@ -54,14 +54,16 @@ async function addSurvey(title, questions){
      };
 }
 
-async function submitAnswers(answers, survey) {
+async function submitAnswers(answers, survey, name) {
 	let url = BASEURL + "/surveys/submit";
 	console.log("answers:" ,answers);
 	console.log("survey:", survey)
+	console.log("name: ", name)
 	try {
 		const res = await axios.post(url, {
 			answers: answers,
 			survey: survey,
+			name: name,
 		});
 		return res;
 	} catch (error) {

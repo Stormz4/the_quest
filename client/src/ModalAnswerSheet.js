@@ -31,10 +31,10 @@ function ModalAnswerSheet(props) {
 		}
 	};
 
-	const submitAnswers = async(ans, s) =>{
+	const submitAnswers = async(ans, s, n) =>{
 
 
-		let res = API.submitAnswers(ans, s)
+		let res = API.submitAnswers(ans, s, n)
 		.then(() => {
 				console.log(res)
 				handleClose();
@@ -68,7 +68,7 @@ function ModalAnswerSheet(props) {
 		}
 
 		if (errors ==0 ){
-			submitAnswers(answers, survey);
+			submitAnswers(answers, survey, name);
 			console.log("ANSWERS: ",answers)
 		}
 		else{

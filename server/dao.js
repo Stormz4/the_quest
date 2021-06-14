@@ -20,7 +20,7 @@ exports.getAdmin = (email, password) => {
 				resolve(false);
 			} else {
 				const user = { id: row.id, username: row.email, name: row.name };
-				// check the hashes with an async call, given that the operation may be CPU-intensive (and we don't want to block the server)
+				// check the hashes with an async call
 				bcrypt.compare(password, row.password).then((result) => {
 					console.log(result);
 					if (result) resolve(user);
@@ -38,7 +38,7 @@ exports.getAdminById = (id) => {
 			if (err) reject(err);
 			else if (row === undefined) resolve({ error: "User not found." });
 			else {
-				// by default, the local strategy looks for "username": not to create confusion in server.js, we can create an object with that property
+				// by default, the local strategy looks for "username"
 				const user = { id: row.id, username: row.email, name: row.name };
 				resolve(user);
 			}
@@ -63,13 +63,12 @@ exports.getAllSurveys = () => {
 			console.log(surveys);
 			resolve(surveys);
 		});
-		//);
-		//});
+
 	});
 };
 
 exports.createSurvey = (title, admin, questions) => {
-	// {description:, important:, private:, deadline:, user:,}
+
 	return new Promise((resolve, reject) => {
 		const sql = "INSERT INTO survey (ref_a, title) VALUES(?, ?)";
 		db.run(sql, [admin, title], function (err) {
@@ -95,7 +94,6 @@ exports.createSurvey = (title, admin, questions) => {
 							return;
 						}
 						let idQ = this.lastID;
-						console.log("PROVA QUESTION");
 						console.log(questions)
 						console.log(questions[i])
 						if (questions[i] != undefined && questions[i].answers != null && questions[i].answers!=undefined) {
@@ -122,6 +120,32 @@ exports.createSurvey = (title, admin, questions) => {
 	});
 };
 
+exports.submitSurvey= (answers, survey, name) => {
+	return new Promise((resolve, reject) => {
+		const sql = "INSERT INTO answer_sheet (name, ref_s) VALUES(?, ?)";
+		db.run(sql, [name, survey.id], function (err) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			let idA = this.lastID;
+			// Iterate over each answers
+			const sql2 =
+				"INSERT INTO answer (ref_q, answer_text, ref_as) VALUES (?, ?, ?)";
+			for (const answer of answers){
+				db.run(sql2, [answer.id_question, answer.answer, idA], function (err){
+					if (err) {
+						reject(err);
+						return;
+					}
+					resolve(idA)
+				})
+			}
+
+		});
+	});
+};
+
 exports.getSurveyById = (id) => {
 	return new Promise((resolve, reject) => {
 
@@ -135,7 +159,6 @@ exports.getSurveyById = (id) => {
 				reject(err);
 				return;
 			}
-			let idQ;
 			let survey;
 			let options = [];
 			let i=0;
@@ -147,7 +170,6 @@ exports.getSurveyById = (id) => {
 				}
 					
 				else if (rows[i].open == 0) {
-					idQ = rows[i].id;
 					options.push({index: i, id: rows[i].id, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
 				}
 			}

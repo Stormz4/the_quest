@@ -175,13 +175,11 @@ app.post(
 			return true;
 		}
 	})
-
-
 	],
 	isLoggedIn,
 	async (req, res) => {
 		const errors = validationResult(req);
-		console.log("BODY:" , req.body)
+
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: errors.array() });
 		}
@@ -192,6 +190,41 @@ app.post(
 			console.log(err);
 			res.status(503).json({
 				error: `Database error during the creation of the survey.`,
+			});
+		}
+	}
+);
+
+app.post(
+	"/api/surveys/submit",
+	[
+		check("name").isString(),
+		check("survey").custom((survey) => {
+			if (survey.id <= 0){
+				throw new Error("Id is not a valid int");
+			}
+			if (survey.title.length === 0){
+				throw new Error("Title must be a valid string");
+			}
+			if (survey.adminName.length === 0) {
+				throw new Error("Admin name must be a valid string");
+			}
+			return true;
+		})
+	],
+
+	async (req, res) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(422).json({ errors: errors.array() });
+		}
+		try {
+			await dao.submitSurvey(req.body.answers, req.body.survey, req.body.name);
+			res.status(201).end();
+		} catch (err) {
+			console.log(err);
+			res.status(503).json({
+				error: `Database error during the submission of the survey.`,
 			});
 		}
 	}
