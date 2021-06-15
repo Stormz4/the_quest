@@ -86,6 +86,8 @@ const isLoggedIn = (req, res, next) => {
  * POST /api/surveys
  * 		insert a survey for a given admin
  * 
+ * POST /api/surveys/submit
+ * 		submit a survey
  * 
  * POST /api/login
  * 		
@@ -277,7 +279,7 @@ app.post('/api/login',[
 
 // DELETE /login/current
 // logout
-app.delete("/api/login/current", (req, res) => {
+app.delete("/api/login/current", isLoggedIn, (req, res) => {
 	req.logout();
 	res.end();
 });
