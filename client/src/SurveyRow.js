@@ -11,13 +11,37 @@ function SurveyRow(props) {
 	const handleSurvey = async (id) => {
 		const getSurveyById = async (id) => {
 			const survey = await API.getSurveyById(id);
-	
+			
+			/* Survey:
+			0:
+				id: 7
+				max: 3
+				min: 1
+				open: 0
+				options: Array(5)
+					0: {index: 0, id: 7, ref_q: 7, option_text: "Dark chocolate"}
+					...
+				length: 5
+				question: "Which is the best chocolate?"
+				ref_q: 7
+				required: null
+				1: {id: 7, question: "Which is the best chocolate?", min: 1, ref_q: 7, max: 3, …}
+				2: {id: 7, question: "Which is the best chocolate?", min: 1, ref_q: 7, max: 3, …}
+				3: {id: 8, question: "Would you like to say something?", min: null, ref_q: null, max: 100, …}
+				4: {id: 9, question: "Why do you like chocolate?", min: null, ref_q: null, max: 200, …}
+			*/
 			// If a question is open, it will be present multiple times.
 			// I remove in this case all the rows that contain a duplicated id
 			// filter((element, index, array) => { ... } )
 			let s2 = survey.filter(
 				(element, index, array) => array.findIndex((t) => t.id === element.id) === index
 			);
+			/*
+			s2:
+				0: {id: 7, question: "Which is the best chocolate?", min: 1, ref_q: 7, max: 3, …}
+				1: {id: 8, question: "Would you like to say something?", min: null, ref_q: null, max: 100, …}
+				2: {id: 9, question: "Why do you like chocolate?", min: null, ref_q: null, max: 200, …}
+			*/
 			props.setSurvey(s2);
 		};
 

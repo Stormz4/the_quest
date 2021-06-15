@@ -4,7 +4,7 @@ import API from "./API"
 import ModalInsertSurvey from "./ModalInsertSurvey";
 import InsertSurveyRow from "./InsertSurveyRow"
 import {
-	Redirect
+	Redirect, useHistory
 } from "react-router-dom";
 
 function InsertSurvey(props) {
@@ -13,7 +13,7 @@ function InsertSurvey(props) {
     const [type, setType] = useState(-1)
     const [question, setQuestion] = useState([])
 	const [title, setTitle] = useState("")
-	const [redirect, setRedirect] = useState(false)
+	const history = useHistory();
 
     function renderQuestions() {
 		if ( question && question.length > 0) {
@@ -37,7 +37,7 @@ function InsertSurvey(props) {
 				setShow(false);
 				setType(-1);
 				props.setDirty(true);
-				setRedirect(true);
+				history.push("/admin")
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -55,11 +55,6 @@ function InsertSurvey(props) {
 		}
 
 	}
-	if (redirect){
-		alert("Success!")
-		return <Redirect to="/admin" />;
-	}
-
 		
     return (
 			<Container

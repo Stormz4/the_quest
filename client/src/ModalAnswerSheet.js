@@ -76,24 +76,28 @@ function ModalAnswerSheet(props) {
 		let errors=0;
 		let counter=0;
 		let errorName;
-		for (const question of surveyQuestions){
-			// For each question, get all the answers with the same id and verify the costraints
-			for (const answer of answers){
-				if (question.id === answer.id_question){
-					if(answer.open === 0){
-						counter++;
+		if (surveyQuestions != undefined || surveyQuestions.length > 0){
+			for (const question of surveyQuestions){
+				// For each question, get all the answers with the same id and verify the costraints
+				for (const answer of answers){
+					if (question.id === answer.id_question){
+						if(answer.open === 0){
+							counter++;
+						}
 					}
 				}
+				if (counter < question.min || counter > question.max){
+					errors++;
+					errorName = question.question;
+					break;
+				}
+				counter=0; // Reset it for the next question
 			}
-			if (counter < question.min || counter > question.max){
-				errors++;
-				errorName = question.question;
-				break;
-			}
-			counter=0; // Reset it for the next question
 		}
 
 		if (errors ==0 ){
+			console.log("SURVEY: ",survey)
+			console.log("SURVEYQUESTIONS: ", surveyQuestions)
 			submitAnswers(answers, survey, name);
 			console.log("ANSWERS: ",answers)
 		}

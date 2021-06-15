@@ -47,7 +47,9 @@ exports.getAdminById = (id) => {
 
 exports.getAllSurveys = () => {
 	return new Promise((resolve, reject) => {
-		const sql = "SELECT S.id, S.title, A.name FROM survey S, admin A WHERE S.ref_A = A.id";
+		const sql = `SELECT S.id, S.title, A.name 
+		FROM survey S, admin A 
+		WHERE S.ref_A = A.id`;
 		db.all(sql, [], (err, rows) => {
 			if (err) {
 				reject(err);
@@ -126,9 +128,20 @@ exports.submitSurvey= (answers, survey, name) => {
 			let idA = this.lastID;
 			// Iterate over each answers
 			const sql2 =
-				"INSERT INTO answer (ref_q, answer_text, ref_as) VALUES (?, ?, ?)";
-			for (const answer of answers){
-				db.run(sql2, [answer.id_question, answer.answer, idA], function (err){
+				"INSERT INTO answer (ref_q, answer_text, ref_as, ref_op) VALUES (?, ?, ?, ?)";
+			if (answers.length > 0 ){
+				for (const answer of answers){
+					db.run(sql2, [answer.id_question, answer.answer, idA, answer.ref_op], function (err){
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve(idA)
+					})
+				}
+			}
+			else{
+				db.run(sql2, [null, " ", idA, null], function (err){
 					if (err) {
 						reject(err);
 						return;
@@ -147,7 +160,12 @@ exports.getSurveyById = (id) => {
 		// Obtain all the questions for a given Survey
 		
 		const sql =
-			"SELECT Q.id, Q.question, Q.min, Q.max, O.ref_q, Q.required, Q.open, O.option_text	 FROM question Q LEFT JOIN option O on O.ref_Q = Q.id  WHERE Q.ref_s = ?";
+		`SELECT Q.id, Q.question, Q.min, Q.max, O.ref_q, O.id as id_option,
+			 Q.required, Q.open, O.option_text
+		FROM question Q 
+			LEFT JOIN option O on O.ref_Q = Q.id  
+		WHERE Q.ref_s = ?
+		ORDER BY Q.id ASC`;
 			
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
@@ -165,7 +183,7 @@ exports.getSurveyById = (id) => {
 				}
 					
 				else if (rows[i].open == 0) {
-					options.push({index: i, id: rows[i].id, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
+					options.push({index: i, id: rows[i].id, id_option:rows[i].id_option, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
 				}
 			}
 		
@@ -192,8 +210,9 @@ exports.getAllSurveysById = (id) => {
 	return new Promise((resolve, reject) => {
 		const sql = `SELECT S.id, S.title, A.name, count(A2.id) AS n_submissions 
 			FROM admin A, survey S 
-			LEFT JOIN answer_sheet A2 on A2.ref_s = S.id 
-			WHERE A.id = ? AND S.ref_A = A.id GROUP BY S.id`;
+				LEFT JOIN answer_sheet A2 on A2.ref_s = S.id 
+			WHERE A.id = ? AND S.ref_A = A.id 
+			GROUP BY S.id`;
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
 				reject(err);
@@ -217,7 +236,8 @@ exports.getAnswerSheetsById = (id) => {
 		// Obtain all the questions for a given Survey
 		console.log("SI")
 		const sql =
-			"SELECT A.id, A.ref_as, A.answer_text, A.ref_q, A2.name, A2.ref_s FROM answer A, answer_sheet A2 WHERE A2.ref_s = ? AND A.ref_as = A2.id";
+			`SELECT A.id, A.ref_as, A.answer_text, A.ref_q, A.ref_op, A2.name, A2.ref_s 
+			FROM answer A, answer_sheet A2 WHERE A2.ref_s = ? AND A.ref_as = A2.id`;
 
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
@@ -231,7 +251,8 @@ exports.getAnswerSheetsById = (id) => {
 				answer_text: e.answer_text,
 				ref_q: e.ref_q,
 				name: e.name,
-				ref_s: e.ref_s
+				ref_s: e.ref_s,
+				ref_op: e.ref_op
 			}));
 
 			console.log(answers)

@@ -213,10 +213,12 @@ app.post(
 	[
 		check("name").isString(),
 		check("answers").custom((answers)=> {
-			for (const answer of answers){
-				if (answer.id_question <= 0 || !answer.id_question || !answer.answer || answer.answer.length <= 0
-					 || answer.open === null || answer.open===undefined || answer.open > 1 || answer.open <0 )
-					throw new Error ("An error has been found. Try again");
+			if (answers!= undefined && answers.length > 0){
+				for (const answer of answers){
+					if (answer.id_question <= 0 || !answer.id_question || !answer.answer || answer.answer.length <= 0
+						|| answer.open === null || answer.open===undefined || answer.open > 1 || answer.open <0 )
+						throw new Error ("An error has been found. Try again");
+				}
 			}
 			return true;
 		}),

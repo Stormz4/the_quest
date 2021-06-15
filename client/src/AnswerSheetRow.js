@@ -7,14 +7,15 @@ function AnswerSheetRow(props) {
     let open = props.item.open;
     let id = props.item.id;
 	let index = props.index;
+	console.log("ITEM:", props.item)
 	if (props.answersSheet != undefined){
-
+		console.log(props.answersSheet)
 	}
 
 	const evaluateCheck =(item) =>{
 		if (props.answersSheet != undefined){
 			for(const answer of props.answersSheet[1]){
-				if (answer.answer_text === item.option_text)
+				if (answer.ref_op === item.id_option)
 					return true;
 				}
 		return false;
@@ -50,7 +51,7 @@ function AnswerSheetRow(props) {
 							// Add the option
 							let arr = [
 								...props.answers,
-								{ id_question: id, answer: item.option_text, open: 0 },
+								{ id_question: id, ref_op:item.id_option, answer: item.option_text, open: 0 },
 								];
 							props.setAnswers(arr);
 						}
