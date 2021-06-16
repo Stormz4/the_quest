@@ -96,10 +96,7 @@ function ModalAnswerSheet(props) {
 		}
 
 		if (errors ==0 ){
-			console.log("SURVEY: ",survey)
-			console.log("SURVEYQUESTIONS: ", surveyQuestions)
 			submitAnswers(answers, survey, name);
-			console.log("ANSWERS: ",answers)
 		}
 		else{
 			setErrorMessage(
@@ -125,6 +122,7 @@ function ModalAnswerSheet(props) {
 									handleSubmit(ev, values.answers);
 								}}
 							>
+								
 								<Form.Label>Insert your name.</Form.Label>
 								<Form.Control
 									name="name"

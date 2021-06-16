@@ -67,9 +67,6 @@ async function addSurvey(title, questions){
 
 async function submitAnswers(answers, survey, name) {
 	let url = BASEURL + "/surveys/submit";
-	console.log(answers.length)
-	console.log(survey)
-	console.log(name)
 	try {
 		const res = await axios.post(url, {
 			answers: answers,
@@ -85,7 +82,6 @@ async function submitAnswers(answers, survey, name) {
 
 
 async function login(credentials) {
-    console.log(JSON.stringify(credentials));
     let response = await fetch("/api/login", {
 			method: "POST",
 			headers: {
@@ -93,7 +89,6 @@ async function login(credentials) {
 			},
 			body: JSON.stringify(credentials),
 		});
-        console.log(response.data)
 		if (response.ok) {
 			const user = await response.json();
 			return user;
@@ -108,7 +103,7 @@ async function login(credentials) {
 }
 
 async function logout() {
-	await fetch("/api/login/current", { method: "DELETE" });
+	let r = await fetch("/api/login/current", { method: "DELETE" });
 }
 
 async function getAdminInfo() {

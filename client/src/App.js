@@ -20,6 +20,7 @@ function App() {
 	const [survey, setSurvey] = useState({})
 	const [dirty, setDirty] = useState(true);
 	const [loggedIn, setLoggedIn] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	const login = async (credentials) => {
 		try {
@@ -45,9 +46,7 @@ function App() {
 	useEffect(() => {
 		const checkAuth = async () => {
 			try {
-				// here you have the user info, if already logged in
-				// TODO: store them somewhere and use them, if needed
-				let user = await API.getAdminInfo();
+				await API.getAdminInfo();
 				setLoggedIn(true);
 			} catch (err) {
 				console.error(err.error);
@@ -69,15 +68,18 @@ function App() {
 				setSurveyList(surveys);
 			}
 
+			setLoading(true)
 			if (!loggedIn){
 				getAllSurveys().then(() => {
 					setDirty(false);
+					setLoading(false);
 				});
 			}
 
 			else{
 				getAllSurveysById().then(() => {
 					setDirty(false);
+					setLoading(false);
 				});
 			}
 
@@ -107,12 +109,21 @@ function App() {
 											{" "}
 											<h2>Welcome!</h2>{" "}
 										</Row>
-										<SurveyContainer
-											loggedIn={loggedIn}
-											survey={survey}
-											setSurvey={setSurvey}
-											surveyList={surveyList}
-										></SurveyContainer>
+										{loading ? (
+											<>
+												<br></br>
+												<br></br>
+												<br></br>
+												<h3>🕗 Please wait, loading your surveys... 🕗</h3>
+											</>
+										) : (
+											<SurveyContainer
+												loggedIn={loggedIn}
+												survey={survey}
+												setSurvey={setSurvey}
+												surveyList={surveyList}
+											></SurveyContainer>
+										)}
 									</Container>
 									<Footer></Footer>
 								</>
@@ -213,11 +224,20 @@ function App() {
 													</svg>
 												</h2>
 											</Row>
-											<SurveyContainer
-												surveyList={surveyList}
-												survey={survey}
-												setSurvey={setSurvey}
-											></SurveyContainer>
+											{loading ? (
+												<>
+													<br></br>
+													<br></br>
+													<br></br>
+													<h3>🕗 Please wait, loading your surveys... 🕗</h3>
+												</>
+											) : (
+												<SurveyContainer
+													surveyList={surveyList}
+													survey={survey}
+													setSurvey={setSurvey}
+												></SurveyContainer>
+											)}
 										</Container>
 										<Footer></Footer>
 									</>

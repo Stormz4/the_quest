@@ -7,10 +7,7 @@ function AnswerSheetRow(props) {
     let open = props.item.open;
     let id = props.item.id;
 	let index = props.index;
-	console.log("ITEM:", props.item)
-	if (props.answersSheet != undefined){
-		console.log(props.answersSheet)
-	}
+
 
 	const evaluateCheck =(item) =>{
 		if (props.answersSheet != undefined){

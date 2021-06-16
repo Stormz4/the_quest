@@ -177,7 +177,6 @@ exports.getSurveyById = (id) => {
 			let i=0;
 			
 			for (i; i<rows.length; i++){
-				console.log(rows[i])
 				if (rows[i].open == 1){
 					options.push(null);
 				}
@@ -234,7 +233,6 @@ exports.getAllSurveysById = (id) => {
 exports.getAnswerSheetsById = (id) => {
 	return new Promise((resolve, reject) => {
 		// Obtain all the questions for a given Survey
-		console.log("SI")
 		const sql =
 			`SELECT A.id, A.ref_as, A.answer_text, A.ref_q, A.ref_op, A2.name, A2.ref_s 
 			FROM answer A, answer_sheet A2 WHERE A2.ref_s = ? AND A.ref_as = A2.id`;

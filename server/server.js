@@ -81,18 +81,22 @@ const isLoggedIn = (req, res, next) => {
  * 		retrieves all the surveys made by an admin, using the session cookie
  * 
  * GET /api/surveys/id=:id
- * 		retrieve a survey and his questions/answers by it's id
+ * 		retrieves a survey and his questions/answers by it's id
+ * 
+ * GET /api/answers/id=:id
+ * 		retrieves all the answer sheets for a specific survey
  * 
  * POST /api/surveys
  * 		insert a survey for a given admin
  * 
  * POST /api/surveys/submit
- * 		submit a survey
+ * 		submit a survey made by an user
  * 
  * POST /api/login
- * 		
+ * 		Send the credentials in order to log in
  * 
  * DELETE /api/login/current
+ * 		If the user is logged in, it logs him out
  * 
  * 
  * GET /api/login/current
@@ -138,7 +142,6 @@ app.get(
 	[check("id").isInt({ min: 0 })], isLoggedIn,
 	async (req, res) => {
 		try {
-			console.log("AOOOO", req.params.id)
 			let answers = await dao.getAnswerSheetsById(req.params.id);
 			res.json(answers);
 		} catch (err) {
@@ -158,10 +161,8 @@ app.post(
 			throw new Error("Questions must contain at least 1 question.")
 		}
 		for (const question of questions) {
-			console.log("DOMANDA:" ,question)
 			//!variable -> variable == null && variable == undefined, not usable if a var can be 0
 			if (!question.question || question.open === null || question.open === undefined || !question.max ){
-				console.log("Crasho 1")
 				isValid = false;
 				break;
 			}
@@ -169,7 +170,6 @@ app.post(
 			if (question.open == 1){
 				if (question.min != null || question.required === null || question.required === undefined 
 					|| question.answers != null || question.max < 0 || question.max > 200){
-					console.log("Crasho 2");
 					isValid = false;
 					break;
 				}
@@ -177,7 +177,6 @@ app.post(
 			else{
 				if (question.required != null || !question.answers || question.min === null || 
 					question.min===undefined || question.min < 0 || question.max > 10 || question.answers.length > 10){
-					console.log("Crasho 3");
 					isValid = false;
 					break;
 				}
@@ -269,7 +268,7 @@ app.post('/api/login',[
 		// success, perform the login
 		req.login(user, (err) => {
 			if (err) return next(err);
-
+			
 			// req.user contains the authenticated user, we send all the user info back
 			// this is coming from userDao.getUser()
 			return res.json(req.user);

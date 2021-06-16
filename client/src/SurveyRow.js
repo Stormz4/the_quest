@@ -7,7 +7,6 @@ function SurveyRow(props) {
 	const [show, setShow] = useState(false);
 	const [answersSheet, setAnswersSheet] = useState([])
 
-	console.log("SURVEY: ", props.surveyList)
 	const handleSurvey = async (id) => {
 		const getSurveyById = async (id) => {
 			const survey = await API.getSurveyById(id);
@@ -59,12 +58,15 @@ function SurveyRow(props) {
 
 		};
 
+		props.setLoading(true)
 		if (props.loggedIn){
 			getAnswerSheetsById(id).then(()=> {
+				props.setLoading(false);
 				setShow(true);
 			});
 		}
 			getSurveyById(id).then(() => {
+				props.setLoading(false);
 				setShow(true);
 			});
 		
@@ -119,6 +121,7 @@ function SurveyRow(props) {
 					loggedIn={props.loggedIn}
 					answersSheet={answersSheet}
 					setAnswersSheet={setAnswersSheet}
+					loading={props.loading}
 				></ModalAnswerSheet>
 			) : (
 				""
