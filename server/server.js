@@ -216,9 +216,18 @@ app.post(
 		check("answers").custom((answers)=> {
 			if (answers!= undefined && answers.length > 0){
 				for (const answer of answers){
-					if (answer.id_question <= 0 || !answer.id_question || !answer.answer || answer.answer.length <= 0
-						|| answer.open === null || answer.open===undefined || answer.open > 1 || answer.open <0 )
-						throw new Error ("An error has been found. Try again");
+					// answer.answer.lenght <=0 or !answer.answer is not a good check, since a user can write in an optional field
+					// and then delete everything. In that case, an example of input could be:
+					// {id_question: x, answer: "", open: 1} which will cause an error.
+					if (
+						answer.id_question <= 0 ||
+						!answer.id_question ||
+						answer.open === null ||
+						answer.open === undefined ||
+						answer.open > 1 ||
+						answer.open < 0
+					)
+						throw new Error("An error has been found. Try again");
 				}
 			}
 			return true;

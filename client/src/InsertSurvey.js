@@ -48,6 +48,7 @@ function InsertSurvey(props) {
 		event.preventDefault();
 		
 		if (title != undefined && title!="" && question.length > 0){
+			console.log("QUESTIONS:" , question)
 			addSurvey(title, question)
 		}
 		else{

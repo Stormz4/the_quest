@@ -78,6 +78,7 @@ exports.createSurvey = (title, admin, questions) => {
 			}
 			let idS = this.lastID;
 			for (let i = 0; i < questions.length; i++) {
+				console.log(questions[i])
 				const sql2 =
 					"INSERT INTO question (ref_s, question, min, max, open, required) VALUES (?, ?, ?, ?, ?, ?)";
 					db.run(
