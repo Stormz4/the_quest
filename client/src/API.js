@@ -66,7 +66,6 @@ async function addSurvey(title, questions){
 }
 
 async function submitAnswers(answers, survey, name) {
-	console.log(answers)
 	let url = BASEURL + "/surveys/submit";
 	try {
 		const res = await axios.post(url, {

@@ -62,7 +62,6 @@ function ModalAnswerSheet(props) {
 	const submitAnswers = async(ans, s, n) =>{
 		let res = API.submitAnswers(ans, s, n)
 		.then(() => {
-				console.log(res)
 				handleClose();
 			})
 			.catch(function (error) {
