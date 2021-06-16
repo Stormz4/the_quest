@@ -58,15 +58,13 @@ function SurveyRow(props) {
 
 		};
 
-		props.setLoading(true)
 		if (props.loggedIn){
 			getAnswerSheetsById(id).then(()=> {
-				props.setLoading(false);
+	
 				setShow(true);
 			});
 		}
 			getSurveyById(id).then(() => {
-				props.setLoading(false);
 				setShow(true);
 			});
 		
