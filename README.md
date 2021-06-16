@@ -82,12 +82,12 @@
 
 ## Database Tables
 
-- Table `admin` - contains id, email, name, password
-- Table `survey` - contains id, ref_a, title
-- Table `question` - contains id, ref_s, question, min, max, open, required
-- Table `option` - contains id, ref_q, option_text
-- Table `answer` - id, ref_q, answer_text, ref_as, ref_op
-- Table `answer_sheet` - contains id, name, ref_s
+- Table `admin` - contains [id, email, name, password]
+- Table `survey` - contains [id, ref_a, title]
+- Table `question` - contains [id, ref_s, question, min, max, open, required, position]
+- Table `option` - contains [id, ref_q, option_text]
+- Table `answer` - contains [id, ref_q, answer_text, ref_as, ref_op]
+- Table `answer_sheet` - contains [id, name, ref_s]
 
 ## Main React Components
 

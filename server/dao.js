@@ -79,7 +79,8 @@ exports.createSurvey = (title, admin, questions) => {
 			let idS = this.lastID;
 			for (let i = 0; i < questions.length; i++) {
 				const sql2 =
-					"INSERT INTO question (ref_s, question, min, max, open, required) VALUES (?, ?, ?, ?, ?, ?)";
+				// The order value will be the index of the element in the array
+					"INSERT INTO question (ref_s, question, min, max, open, required, position) VALUES (?, ?, ?, ?, ?, ?, ?)";
 					db.run(
 					sql2,[idS,
 						questions[i].question,
@@ -87,6 +88,7 @@ exports.createSurvey = (title, admin, questions) => {
 						questions[i].max,
 						questions[i].open,
 						questions[i].required,
+						i
 					],
 					function (err) {
 						if (err) {
@@ -165,7 +167,7 @@ exports.getSurveyById = (id) => {
 		FROM question Q 
 			LEFT JOIN option O on O.ref_Q = Q.id  
 		WHERE Q.ref_s = ?
-		ORDER BY Q.id ASC`;
+		ORDER BY Q.position ASC`;
 			
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
