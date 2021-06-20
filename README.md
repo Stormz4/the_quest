@@ -83,8 +83,20 @@
 ## Database Tables
 
 - Table `admin` - contains [id, email, name, password]
+  - id: id of the admin
+  - email: email of the admin, used for the login
+  - name: name of admin, showed on the screen after a login
+  - password: crypted password of the admin through bcrypt
 - Table `survey` - contains [id, ref_a, title]
+  - id: id of the survey
+  - ref_a: reference of the admin for a given survey
+  - title: title of the given survey
 - Table `question` - contains [id, ref_s, question, min, max, open, required, position]
+  - id: id of the question
+  - ref-s: reference of the survey containing the given question
+  - question: text of the question
+  - min: minimum number of answers checkable for a closed question. It's null for an open question.
+  - max: maximum number of answers checkable for a closed question. For an open question, it's the maximum number of chars to insert.
 - Table `option` - contains [id, ref_q, option_text]
 - Table `answer` - contains [id, ref_q, answer_text, ref_as, ref_op]
 - Table `answer_sheet` - contains [id, name, ref_s]

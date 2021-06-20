@@ -169,7 +169,7 @@ app.post(
 			
 			if (question.open == 1){
 				if (question.min != null || question.required === null || question.required === undefined 
-					|| question.answers != null || question.max < 0 || question.max > 200){
+					|| question.answers != null || question.max <= 0 || question.max > 200){
 					isValid = false;
 					break;
 				}

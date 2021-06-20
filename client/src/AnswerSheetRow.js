@@ -77,7 +77,7 @@ function AnswerSheetRow(props) {
 		<>
 			{open ? (
 				<Form.Group>
-					<Form.Label>{props.item.question}</Form.Label>
+					<Form.Label><h6><i>{props.item.question}</i></h6></Form.Label>
 					<Form.Control
 						name="answers"
 						readOnly={props.loggedIn}
@@ -104,7 +104,7 @@ function AnswerSheetRow(props) {
 				</Form.Group>
 			) : (
 				<Form.Group>
-					<Form.Label>{props.item.question}</Form.Label>
+					<Form.Label><h6><i>{props.item.question}</i></h6></Form.Label>
 					{renderOptions(props.item.options)}
 					<Form.Text className="text-muted">
 						min/max options to choose: {props.item.min}/{props.item.max}

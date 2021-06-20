@@ -6,13 +6,13 @@ function ModalInsertSurvey(props) {
 
 	// Closed question
 	const [min, setMin] = useState(0);
-	const [max, setMax] = useState(0);
-	const [nAns, setN] = useState(0);
+	const [max, setMax] = useState(1);
+	const [nAns, setN] = useState(1);
 	const [answers, setAnswers] = useState([]);
 	const [genAnswers, setGenAnswers] = useState([])
 	const [maxChar, setMaxChar] = useState(0);
 	const [errorMessage, setErrorMessage] = useState("");
-	const [showAnswer, setShowAnswer] = useState(false)
+	const [showAnswer, setShowAnswer] = useState(true)
 
 	// Closed
 	const [required, setRequired] = useState(false);
@@ -21,6 +21,9 @@ function ModalInsertSurvey(props) {
 	function generateAnswer(nAnswers){
 
 		let arr = [];
+		console.log("ecco", showAnswer)
+		console.log("MAX:" , max)
+		console.log("N_ANS:",nAnswers)
 		if (max>0 && max <= nAnswers){
 			for (let i=0; i<nAnswers; i++){
 				arr.push("")
@@ -40,8 +43,9 @@ function ModalInsertSurvey(props) {
 	const handleClose = () => {
 		setQuestion("")
 		setMin(0)
-		setMax(0)
-		setMaxChar(0)
+		setMax(1)
+		setN(1)
+		setMaxChar(1)
 		setRequired(false)
 		setShowAnswer(false)
 		setErrorMessage("")
@@ -121,7 +125,7 @@ function ModalInsertSurvey(props) {
 									<>
 										<Form.Group>
 											<Form.Label>
-												Insert the minimum number of answers.{" "}
+												Insert the minimum number of answers checkable.{" "}
 											</Form.Label>
 											<Form.Control
 												as="select"
@@ -143,14 +147,13 @@ function ModalInsertSurvey(props) {
 										</Form.Group>
 										<Form.Group>
 											<Form.Label>
-												Insert the maximum number of answers.{" "}
+												Insert the maximum number of answers checkable.{" "}
 											</Form.Label>
 											<Form.Control
 												as="select"
 												required
 												onChange={(ev) => setMax(ev.target.value)}
 											>
-												<option value="0">0</option>
 												<option value="1">1</option>
 												<option value="2">2</option>
 												<option value="3">3</option>
@@ -164,7 +167,7 @@ function ModalInsertSurvey(props) {
 											</Form.Control>
 										</Form.Group>
 										<Form.Group>
-											<Form.Label>Insert the number of answers. </Form.Label>
+											<Form.Label>Insert the number of answers to choose from. </Form.Label>
 											<Form.Control
 												as="select"
 												required
@@ -173,7 +176,6 @@ function ModalInsertSurvey(props) {
 													setShowAnswer(true);
 												}}
 											>
-												<option value="0">0</option>
 												<option value="1">1</option>
 												<option value="2">2</option>
 												<option value="3">3</option>
