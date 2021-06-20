@@ -21,7 +21,6 @@ exports.getAdmin = (email, password) => {
 				const user = { id: row.id, username: row.email, name: row.name };
 				// check the hashes with an async call
 				bcrypt.compare(password, row.password).then((result) => {
-					console.log(result);
 					if (result) resolve(user);
 					else resolve(false);
 				});
@@ -45,6 +44,7 @@ exports.getAdminById = (id) => {
 	});
 };
 
+// Gets all the survies and the admin's name regarding a certain survey
 exports.getAllSurveys = () => {
 	return new Promise((resolve, reject) => {
 		const sql = `SELECT S.id, S.title, A.name 
@@ -67,6 +67,7 @@ exports.getAllSurveys = () => {
 	});
 };
 
+// Insert a survey, the questions made for it and all the options
 exports.createSurvey = (title, admin, questions) => {
 
 	return new Promise((resolve, reject) => {
@@ -107,6 +108,9 @@ exports.createSurvey = (title, admin, questions) => {
 										reject(err);
 										return;
 									}
+									// The promise is solved at the end of the cascade, because otherwise a promise
+									// could've been returned before the end.
+									// This would've caused a wrong response to the front end.
 									resolve(idS);
 								});
 							}
@@ -119,6 +123,7 @@ exports.createSurvey = (title, admin, questions) => {
 	});
 };
 
+// Create a new answer sheet and insert all the answers that have been made.
 exports.submitSurvey= (answers, survey, name) => {
 	return new Promise((resolve, reject) => {
 		const sql = "INSERT INTO answer_sheet (name, ref_s) VALUES(?, ?)";
@@ -142,6 +147,7 @@ exports.submitSurvey= (answers, survey, name) => {
 					})
 				}
 			}
+			// In the case where a survey contains only a question, which is not required.
 			else{
 				db.run(sql2, [null, " ", idA, null], function (err){
 					if (err) {
@@ -156,6 +162,7 @@ exports.submitSurvey= (answers, survey, name) => {
 	});
 };
 
+// Get a survey by it's id and all of its questions
 exports.getSurveyById = (id) => {
 	return new Promise((resolve, reject) => {
 
@@ -178,11 +185,19 @@ exports.getSurveyById = (id) => {
 			let options = [];
 			let i=0;
 			
+			// Create an array of options, where all the options data will be stored.
+			// If a question is open, null will be pushed. Otherwise,
+			// a new element will be pushed containing:
+			// index, the id of the survey, the id of the option, the ref of the question, the text of the option.
+			// This array will be handled properly by the front end.
+			// Duplicates and null elements will be removed.
+			// This solution was made in order to obtain only one resolve.
+			
 			for (i; i<rows.length; i++){
 				if (rows[i].open == 1){
 					options.push(null);
 				}
-					
+				
 				else if (rows[i].open == 0) {
 					options.push({index: i, id: rows[i].id, id_option:rows[i].id_option, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
 				}

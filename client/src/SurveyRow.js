@@ -147,7 +147,7 @@ function SurveyRow(props) {
 				<Col lg={2} className="m-0 p-0">
 					<Button
 						variant="outline-success"
-						disabled={props.surveyList[props.index].n_submissions==0}
+						disabled={props.surveyList[props.index].n_submissions===0}
 						onClick={() => {
 							handleSurvey(props.item.id);
 						}}

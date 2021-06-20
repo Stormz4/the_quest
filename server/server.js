@@ -112,12 +112,14 @@ const isLoggedIn = (req, res, next) => {
  * */
 
 
+// Get all the surveys
 app.get('/api/surveys', async (req, res) => {
     await dao.getAllSurveys()
     .then(surveys => res.json(surveys))
     .catch(()=> res.status(500).json("Database unreachable"));
 });
 
+// Get all the surveys made by a certain admin. Admin id will be retrieved from the session
 app.get("/api/surveys/admin", isLoggedIn, async (req, res) => {
 	await dao
 		.getAllSurveysById(req.user.id)
@@ -125,6 +127,7 @@ app.get("/api/surveys/admin", isLoggedIn, async (req, res) => {
 		.catch(() => res.status(500).json("Database unreachable"));
 });
 
+// Get the survey data by a certain survey id
 app.get(
 	"/api/surveys/id=:id",
 	[check("id").isInt({ min: 0 })],
@@ -138,6 +141,7 @@ app.get(
 	}
 );
 
+// Get all the answer sheets for a certain survey id
 app.get(
 	"/api/answers/id=:id",
 	[check("id").isInt({ min: 0 })], isLoggedIn,
@@ -152,11 +156,12 @@ app.get(
 );
 
 
-
+// Create a survey
 app.post(
 	"/api/surveys",
 	[check("title").isString(), 
 	check("questions").custom(questions =>{
+		// Custom check in order to verify every field in a proper way.
 		let isValid = true;
 		if (questions.length === 0){
 			throw new Error("Questions must contain at least 1 question.")
@@ -210,11 +215,13 @@ app.post(
 	}
 );
 
+// Insert a submission for a certain survey
 app.post(
 	"/api/surveys/submit",
 	[
 		check("name").isString(),
 		check("answers").custom((answers)=> {
+			// Custom check in order to verify every field in a proper way.
 			if (answers!= undefined && answers.length > 0){
 				for (const answer of answers){
 					// answer.answer.lenght <=0 or !answer.answer is not a good check, since a user can write in an optional field
