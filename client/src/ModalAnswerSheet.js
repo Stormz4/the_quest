@@ -1,8 +1,18 @@
 import { Button, Modal, Form, Alert } from "react-bootstrap";
 import { useState } from "react";
-import { Formik, FieldArray } from "formik";
+import { Formik } from "formik";
 import API from "./API";
 import AnswerSheetRow from "./AnswerSheetRow";
+
+/*
+	This component represents the modal used to:
+	- submit a survey , only for a non-logged user
+	- view the submissions made for a certain survey, only for a logged admin 
+
+	It contains also all the states regarding the answers and it receives, as a prop, the specific survey and all the answer sheets related to it.
+	It also maintains an index in order to move forward and back between all the answers sheets.
+
+*/
 
 function ModalAnswerSheet(props) {
 	const [name, setName] = useState("");
@@ -20,11 +30,10 @@ function ModalAnswerSheet(props) {
 		setErrorMessage("")
 		setIndex(0)
 		props.setAnswersSheet([])
-		//props.setSurvey({})
 	};
 
 	const renderForm = (values, handleChange) => {
-		if (surveyQuestions != undefined && surveyQuestions.length > 0 ) {
+		if (surveyQuestions !== undefined && surveyQuestions.length > 0 ) {
 			return surveyQuestions.map((item, index) => (
 				<AnswerSheetRow
 					loggedIn={props.loggedIn}
@@ -42,7 +51,7 @@ function ModalAnswerSheet(props) {
 
 	const evaluatePlaceholderName = () =>{
 
-		if (props.answersSheet != undefined && props.answersSheet.length > 0) {
+		if (props.answersSheet !== undefined && props.answersSheet.length > 0) {
 			// AnswersSheet is made as:
 			/*
 			0: Array(2)
@@ -60,7 +69,7 @@ function ModalAnswerSheet(props) {
 		} else return "Insert your answer.";
 	}
 	const submitAnswers = async(ans, s, n) =>{
-		let res = API.submitAnswers(ans, s, n)
+		API.submitAnswers(ans, s, n)
 		.then(() => {
 				handleClose();
 			})
@@ -75,7 +84,7 @@ function ModalAnswerSheet(props) {
 		let errors=0;
 		let counter=0;
 		let errorName;
-		if (surveyQuestions != undefined || surveyQuestions.length > 0){
+		if (surveyQuestions !== undefined || surveyQuestions.length > 0){
 			for (const question of surveyQuestions){
 				// For each question, get all the answers with the same id and verify the costraints
 				for (const answer of answers){
@@ -94,7 +103,7 @@ function ModalAnswerSheet(props) {
 			}
 		}
 
-		if (errors ==0 ){
+		if (errors === 0 ){
 			submitAnswers(answers, survey, name);
 		}
 		else{
@@ -144,7 +153,7 @@ function ModalAnswerSheet(props) {
 										<>
 											<Button
 												variant="info"
-												disabled={indexSheet == 0}
+												disabled={indexSheet === 0}
 												className="ml-0 p-2"
 												onClick={() => {
 													setIndex(indexSheet - 1);
@@ -169,7 +178,7 @@ function ModalAnswerSheet(props) {
 											<Button
 												variant="info"
 												className="ml-0 p-2"
-												disabled={indexSheet == props.answersSheet.length-1}
+												disabled={indexSheet === props.answersSheet.length-1}
 												onClick={() => setIndex(indexSheet + 1)}
 											>
 												Go forward

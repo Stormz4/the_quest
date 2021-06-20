@@ -1,7 +1,9 @@
-import {Navbar, Button, ListGroup, Row, Form, FormControl, Container} from "react-bootstrap"
+import {Navbar, Button, Row, Container} from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useState } from "react";
 import LoginModal from "./LoginModal"
+
+// This component represents the navbar of the webapp, which is rendered differenty for logged and non logged users.
 
 function NavigationBar (props) {
 	const [show, setShow] = useState(false);

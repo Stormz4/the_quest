@@ -1,11 +1,16 @@
 
 import { Col, Row, ListGroup, Button } from "react-bootstrap";
 
+/*
+	This component represents a question row renderer in the Insert Survey page.
+	It contains the buttons used to move up, move down and delete a question.
+*/
+
 function InsertSurveyRow(props) {
 
 	const moveUp = () =>{
 		let q = [...props.question]
-		if (props.id == 0) {
+		if (props.id === 0) {
 			alert("The element is at the top");
 		}
 		else{
@@ -19,7 +24,7 @@ function InsertSurveyRow(props) {
 
 	const moveDown = () =>{
 		let q = [...props.question];
-		if (props.id+1== props.question.length) {
+		if (props.id+1 === props.question.length) {
 			alert("The element is at the bottom");
 		}else {
 

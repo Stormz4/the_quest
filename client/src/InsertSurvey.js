@@ -1,11 +1,20 @@
-import { Button, Modal, Form, Col, Container, Row, ListGroup} from "react-bootstrap";
+import { Button, Form, Alert, Container, Row, ListGroup} from "react-bootstrap";
 import { useState } from "react";
 import API from "./API"
 import ModalInsertSurvey from "./ModalInsertSurvey";
 import InsertSurveyRow from "./InsertSurveyRow"
 import {
-	Redirect, useHistory
+	useHistory
 } from "react-router-dom";
+
+/*
+	This component represents the page used to insert a survey.
+	It contains the states regarding all the questions and makes use of modals in order to render the forms to insert a certain type of question,
+	setting the state accordingly.
+	Open -> type = 0, Closed = type = 1.
+	It also checks if the title has been inserted and if there is at least 1 question in the survey.	
+	This component also calls the API in order to insert a certain survey.
+*/
 
 function InsertSurvey(props) {
     const [show, setShow] = useState(false);
@@ -13,6 +22,7 @@ function InsertSurvey(props) {
     const [type, setType] = useState(-1)
     const [question, setQuestion] = useState([])
 	const [title, setTitle] = useState("")
+	const [errorMessage, setErrorMessage] = useState("");
 	const history = useHistory();
 
     function renderQuestions() {
@@ -32,11 +42,12 @@ function InsertSurvey(props) {
 	const addSurvey = async(titleToAdd, questionsToAdd) =>{
 
 
-		let res = API.addSurvey(titleToAdd, questionsToAdd)
+		API.addSurvey(titleToAdd, questionsToAdd)
 		.then(() => {
 				setShow(false);
 				setType(-1);
 				props.setDirty(true);
+				setErrorMessage("")
 				history.push("/admin")
 			})
 			.catch(function (error) {
@@ -47,11 +58,11 @@ function InsertSurvey(props) {
 	const handleSubmit = (event) =>{
 		event.preventDefault();
 		
-		if (title != undefined && title!="" && question.length > 0){
+		if (title !== undefined && title!=="" && question.length > 0){
 			addSurvey(title, question)
 		}
 		else{
-			alert("You must add at least a question and a title.")
+			setErrorMessage("You must add at least a question and a title.")
 		}
 
 	}
@@ -87,6 +98,11 @@ function InsertSurvey(props) {
 						Insert a closed question
 					</Button>
 				</Row>
+				{errorMessage ? (
+									<Alert variant="danger">{errorMessage}</Alert>
+								) : (
+									""
+								)}
 				<Row className="justify-content-center p-1 align-items-center">
 					<Form>
 					<Form.Group>

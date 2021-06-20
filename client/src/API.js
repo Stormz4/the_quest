@@ -1,5 +1,8 @@
 import axios from "axios";
 
+/*
+	API.js contains all the API calls and the methods that communicate with the backend.
+*/
 
 const BASEURL = '/api';
 
@@ -103,7 +106,7 @@ async function login(credentials) {
 }
 
 async function logout() {
-	let r = await fetch("/api/login/current", { method: "DELETE" });
+	await fetch("/api/login/current", { method: "DELETE" });
 }
 
 async function getAdminInfo() {

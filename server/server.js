@@ -34,6 +34,7 @@ passport.use(
 );
 
 // serialize and de-serialize the user (user object <-> session)
+
 // we serialize the user id and we store it in the session: the session is very small in this way
 passport.serializeUser((user, done) => {
 	done(null, user.id);
@@ -98,8 +99,8 @@ const isLoggedIn = (req, res, next) => {
  * DELETE /api/login/current
  * 		If the user is logged in, it logs him out
  * 
- * 
  * GET /api/login/current
+ * 		Retrieves the information regarding a logged in user
  * 
  * 
  * 

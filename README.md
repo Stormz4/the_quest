@@ -82,30 +82,43 @@
 
 ## Database Tables
 
-- Table `admin` - contains [id, email, name, password]
-  - id: id of the admin
-  - email: email of the admin, used for the login
-  - name: name of admin, showed on the screen after a login
-  - password: crypted password of the admin through bcrypt
-- Table `survey` - contains [id, ref_a, title]
-  - id: id of the survey
-  - ref_a: reference of the admin for a given survey
-  - title: title of the given survey
-- Table `question` - contains [id, ref_s, question, min, max, open, required, position]
-  - id: id of the question
-  - ref-s: reference of the survey containing the given question
-  - question: text of the question
-  - min: minimum number of answers checkable for a closed question. It's null for an open question.
-  - max: maximum number of answers checkable for a closed question. For an open question, it's the maximum number of chars to insert.
-- Table `option` - contains [id, ref_q, option_text]
-- Table `answer` - contains [id, ref_q, answer_text, ref_as, ref_op]
-- Table `answer_sheet` - contains [id, name, ref_s]
+- Table `admin` - contains [id, email, name, password]. The purpouse of the table is to store every admin of the system.
+  - `id`: Id of the admin
+  - `email`: Email of the admin, used for the login
+  - `name`: Name of admin, showed on the screen after a login
+  - `password`: Crypted password of the admin through bcrypt
+- Table `survey` - contains [id, ref_a, title]. The purpouse of the table is to store every survey, each one related to a certain admin.
+  - `id`: Id of the survey
+  - `ref_a`: Reference of the admin id that made a given survey
+  - `title`: Title of the given survey
+- Table `question` - contains [id, ref_s, question, min, max, open, required, position]. The purpouse of the table is to store every question, each one related to a certain survey.
+  - `id`: Id of the question
+  - `ref_s`: Reference of the survey id which contains the given question
+  - `question`: Containts the text of the question
+  - `min`: Minimum number of answers checkable for a closed question. It's null for an open question.
+  - `max`: Maximum number of answers checkable for a closed question. For an open question, it's the maximum number of chars to insert.
+  - `open`: 0 if the question is closed, 1 if it's open.
+  - `required`: Used only for open questions, otherwise min/max are used to express required questions. 1 if required, 0 otherwise.
+  - `position`: Represent the position in the order in the survey: it's used to order them when a survey is presented to the user.
+- Table `option` - contains [id, ref_q, option_text]. The purpouse of the table is to store every option regarding a closed question.
+  - `id`: Id of the option
+  - `ref_q`: Reference of the question id
+  - `option_text`: Contains the text of the option
+- Table `answer` - contains [id, ref_q, answer_text, ref_as, ref_op]. The purpouse of the table is to store every answer regarding a certain question, for each answer sheet. It's used to save the answers made by an user and show them to an admin.
+  - `id`: Id of the answer
+  - `answer_text`: Contains the text of the answer. In the case of a closed questions, contains the value of the checkbox.
+  - `ref_as`: Reference to the answer sheet id which contains the answers inserted.
+  - `ref_op`: Reference to the option id, if it's a closed question.
+- Table `answer_sheet` - contains [id, name, ref_s]. The purpouse of the table is to store the submissions made by an user.
+  - `id`: Id of the answer sheet.
+  - `name`: Name of the user that submitted the answers.
+  - `ref_s`: Reference to the survey id.
 
 ## Main React Components
 
 - `SurveyRow` (in `SurveyRow.js`): shows how a Survey is rendered inside a `SurveyContainer.js`. It contains also the API call to get all the info regarding a survey, which are called when the button near a certain survey is pressed (If the user is logged in, it will fetch also the answer sheets related to a certain survey. After fetching it, the response from the back-end will be processed and setted as a state).
 - `ModalInsertSurvey` (in `ModalInsertSurvey.js`): contains all the states regarding a specific question and handles the insertion of a specific question. It contains both the return methods for an open and a closed question.
-- `InsertSurveyRow` (in `InsertSurveyRow.js`): shows how a question is rendered inside `InsertSurvey.js`. It contains also the methods to order a question and to delete it.
+- `InsertSurveyRow` (in `InsertSurveyRow.js`): shows how a question is rendered inside `InsertSurvey.js`. It contains also the methods to order a question (move up/move down) and to delete it.
 - `ModalAnswerSheet` (in `ModalAnswerSheet.js`): handle the submission for a specific survey / shows the data regarding all the submissions that an admin received on one of his surveys.
 - `AnswerSheetRow` (in `AnswerSheetRow.js`): renders all the questions for a specific survey and handles the state for each one of them, by managing an answer array state. 
 - `API.js` (in `API.js`): contains all the API calls and the methods that communicate with the backend.
@@ -120,4 +133,6 @@
 ## Users Credentials
 
 - email: s286329@studenti.polito.it, name: Mario Rossi, password: esameMattia
+  - Made "Chocolate survey" and "Art survey"
 - email: mattia@polito.it, name: Mattia, password: pistacchio 
+  - Made "Survey about pizza"

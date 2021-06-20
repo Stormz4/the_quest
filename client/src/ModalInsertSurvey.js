@@ -1,6 +1,26 @@
 import { Button, Modal, Form, Alert } from "react-bootstrap";
 import { useState } from "react";
 
+/*
+	This component represents the modal used to insert a question for a given survey.
+	It contains all the states regarding the fields of a question and it handles/validates them.
+
+	In case of a closed question, it also handles the rendering of all the input forms based on the value inserted.
+	After the value of the form containing the number of answers possible is changed, 
+	a state "ShowAnswer" is set to true (it starts as true originally). If that state is true, a method is called 
+	which pushes n (depending on the number of answers) empty elements to an array. 
+	This array is used then to render n form input. Each form input will insert elements ONLY in the slot of his index
+	thanks to slice(start, end), in this case (0, index).
+	If i generate 3 forms for each answers, form n°0 will insert elements only in genAnswers[0].
+	The instruction:
+		setGenAnswers([...genAnswers.slice(0, index),ev.target.value]) takes the old array, 
+		gets all the elements contained between 0 and index (slices it) and then inserts the new value.
+		This solution is used in order to fix the problems regarding handling states which are array.
+
+		When the state is an array and you write a char in a form, a new element will be pushed.
+		If i have my string "ab" and i write b, "abc" will be pushed.
+*/
+
 function ModalInsertSurvey(props) {
 	const [question, setQuestion] = useState();
 
@@ -21,9 +41,6 @@ function ModalInsertSurvey(props) {
 	function generateAnswer(nAnswers){
 
 		let arr = [];
-		console.log("ecco", showAnswer)
-		console.log("MAX:" , max)
-		console.log("N_ANS:",nAnswers)
 		if (max>0 && max <= nAnswers){
 			for (let i=0; i<nAnswers; i++){
 				arr.push("")
@@ -60,7 +77,7 @@ function ModalInsertSurvey(props) {
 
 		if ((min <= max) && (max <= nAns)) {
 			let questionComplete;
-			if (props.type == 1) {
+			if (props.type === 1) {
 				questionComplete = {
 					question: question,
 					min: min,
@@ -188,6 +205,25 @@ function ModalInsertSurvey(props) {
 												<option value="10">10</option>
 											</Form.Control>
 										</Form.Group>
+										{showAnswer
+									? generateAnswer(nAns)
+									: answers.map((item, index) => (
+											<Form.Group>
+												<Form.Label>Insert the answer </Form.Label>
+												<Form.Control
+													name="answer"
+													required
+													placeholder="Insert your answer"
+													type="string"
+													onChange={(ev) =>
+														setGenAnswers([
+															...genAnswers.slice(0, index),
+															ev.target.value,
+														])
+													}
+												/>
+											</Form.Group>
+									  ))}
 									</>
 								) : (
 									<>
@@ -219,25 +255,7 @@ function ModalInsertSurvey(props) {
 										</Form.Group>
 									</>
 								)}
-								{showAnswer
-									? generateAnswer(nAns)
-									: answers.map((item, index) => (
-											<Form.Group>
-												<Form.Label>Insert the answer </Form.Label>
-												<Form.Control
-													name="answer"
-													required
-													placeholder="Insert your answer"
-													type="string"
-													onChange={(ev) =>
-														setGenAnswers([
-															...genAnswers.slice(0, index),
-															ev.target.value,
-														])
-													}
-												/>
-											</Form.Group>
-									  ))}
+								
 								<Modal.Footer className="justify-content-center ">
 									<Button variant="secondary" onClick={handleClose}>
 										Close

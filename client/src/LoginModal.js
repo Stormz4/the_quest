@@ -1,7 +1,14 @@
-import { Button, Modal, Form, Col, Row, Alert } from "react-bootstrap";
+import { Button, Modal, Form, Row, Alert } from "react-bootstrap";
 import { useState } from "react";
 
 import {Redirect} from "react-router-dom";
+
+/*
+	This component represents the modal rendered in order to make a login. 
+	It calls the login method present in App.js, which calls the API in order to set the session.
+	It also contains validation of the credentials.
+	toLowerCase() of the email is made in order to make the email not case-sensitive.
+*/
 
 function LoginModal(props) {
 	const [emailNoCase, setEmail] = useState("");

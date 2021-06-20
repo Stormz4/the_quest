@@ -1,6 +1,6 @@
-import logo from './logo.svg';
+
 import './App.css';
-import { Container, Col, Button, Row} from "react-bootstrap";
+import { Container, Button, Row} from "react-bootstrap";
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -15,6 +15,15 @@ import { useState, useEffect } from "react";
 import API from "./API"
 import InsertSurvey from "./InsertSurvey"
 
+
+/*
+	This component contains the states regarding a certain survey, the entire survey list, the dirty bit (used to show the updates),
+	the login and the loading (which is used when you log to render the surveys properly.)
+	Other than that, handles the login/logout/checks if a user is logged in, 
+	uses API methods to get the surveys/the surveys for a specific admin 
+	and contains all the routes, while also rendering the main pages both for loggend and not-logged users.
+
+*/
 function App() {
 	const [surveyList, setSurveyList] = useState([]); 
 	const [survey, setSurvey] = useState({})
