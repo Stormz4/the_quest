@@ -23,16 +23,21 @@ function ModalAnswerSheet(props) {
 	let surveyQuestions = props.survey;
 	let survey = props.item;
 
+
 	const handleClose = () => {
 		props.setShow(false);
+		/*
 		setName("")
 		setAnswers([])
-		setErrorMessage("")
+		props.setAnswersSheet([]);
+		*/
 		setIndex(0)
-		props.setAnswersSheet([])
+		setErrorMessage("")
+
 	};
 
 	const renderForm = (values, handleChange) => {
+
 		if (surveyQuestions !== undefined && surveyQuestions.length > 0 ) {
 			return surveyQuestions.map((item, index) => (
 				<AnswerSheetRow
@@ -147,7 +152,14 @@ function ModalAnswerSheet(props) {
 								) : (
 									""
 								)}
-								{renderForm(values, handleChange)}
+								{props.loading ? (
+											<>
+												<br></br>
+												<br></br>
+												<br></br>
+												<h3>🕗 Please wait, loading your surveys... 🕗</h3>
+											</>
+										) : renderForm(values, handleChange)}
 								<Modal.Footer className="justify-content-center ">
 									{props.loggedIn ? (
 										<>
@@ -164,11 +176,11 @@ function ModalAnswerSheet(props) {
 													width="32"
 													height="32"
 													fill="currentColor"
-													class="bi bi-arrow-bar-left"
+													className="bi bi-arrow-bar-left"
 													viewBox="0 0 16 16"
 												>
 													<path
-														fill-rule="evenodd"
+														fillRule="evenodd"
 														d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5zM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5z"
 													/>
 												</svg>{" "}
@@ -187,11 +199,11 @@ function ModalAnswerSheet(props) {
 													width="32"
 													height="32"
 													fill="currentColor"
-													class="bi bi-arrow-bar-right"
+													className="bi bi-arrow-bar-right"
 													viewBox="0 0 16 16"
 												>
 													<path
-														fill-rule="evenodd"
+														fillRule="evenodd"
 														d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"
 													/>
 												</svg>

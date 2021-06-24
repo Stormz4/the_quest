@@ -21,7 +21,7 @@ function NavigationBar (props) {
 									width="32"
 									height="32"
 									fill="currentColor"
-									class="bi bi-patch-question"
+									className="bi bi-patch-question"
 									viewBox="0 0 16 16"
 								>
 									<path d="M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745z" />
@@ -37,7 +37,6 @@ function NavigationBar (props) {
 								<>
 									<Link to="/insert" style={{ textDecoration: "none" }}>
 										<Button
-											href="/insert"
 											variant="success"
 											className="ml-0 p-2"
 										>
@@ -46,7 +45,7 @@ function NavigationBar (props) {
 												width="32"
 												height="32"
 												fill="currentColor"
-												class="bi bi-file-earmark-text"
+												className="bi bi-file-earmark-text"
 												viewBox="0 0 16 16"
 											>
 												<path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
@@ -67,7 +66,7 @@ function NavigationBar (props) {
 											width="32"
 											height="32"
 											fill="currentColor"
-											class="bi bi-door-closed"
+											className="bi bi-door-closed"
 											viewBox="0 0 16 16"
 										>
 											<path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z" />
@@ -89,7 +88,7 @@ function NavigationBar (props) {
 										width="32"
 										height="32"
 										fill="currentColor"
-										class="bi bi-door-open"
+										className="bi bi-door-open"
 										viewBox="0 0 16 16"
 									>
 										<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z" />

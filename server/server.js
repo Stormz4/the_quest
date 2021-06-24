@@ -288,7 +288,7 @@ app.post('/api/login',[
 			
 			// req.user contains the authenticated user, we send all the user info back
 			// this is coming from userDao.getUser()
-			return res.json(req.user);
+			return res.json(req.user.name);
 		});
 	})(req, res, next);
 });
@@ -302,7 +302,7 @@ app.delete("/api/login/current", isLoggedIn, (req, res) => {
 
 app.get("/api/login/current", (req, res) => {
 	if (req.isAuthenticated()) {
-		res.status(200).json(req.user);
+		res.status(200).json(req.user.name);
 	} else res.status(401).json({ error: "Unauthenticated user!" });
 });
 

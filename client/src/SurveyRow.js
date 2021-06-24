@@ -19,6 +19,7 @@ import API from "./API";
 function SurveyRow(props) {
 	const [show, setShow] = useState(false);
 	const [answersSheet, setAnswersSheet] = useState([])
+	const [loading, setLoading] = useState(true);
 
 	const handleSurvey = async (id) => {
 		const getSurveyById = async (id) => {
@@ -116,6 +117,7 @@ function SurveyRow(props) {
 
 		};
 
+		setLoading(true);
 		if (props.loggedIn){
 			getAnswerSheetsById(id).then(()=> {
 				setShow(true);
@@ -123,6 +125,7 @@ function SurveyRow(props) {
 		}
 		getSurveyById(id).then(() => {
 			setShow(true);
+			setLoading(false);
 		});
 		
 	};
@@ -132,7 +135,7 @@ function SurveyRow(props) {
 			<Row>
 				<Col lg={10} className="m-0 p-0">
 					<h2>{props.item.title}</h2>
-					<h8>
+					
 						<i>made by {props.item.adminName}</i>
 						{props.loggedIn ? (
 							<i>
@@ -142,7 +145,7 @@ function SurveyRow(props) {
 						) : (
 							""
 						)}
-					</h8>
+					
 				</Col>
 				<Col lg={2} className="m-0 p-0">
 					<Button
@@ -157,7 +160,7 @@ function SurveyRow(props) {
 							width="32"
 							height="32"
 							fill="currentColor"
-							class="bi bi-eye-fill"
+							className="bi bi-eye-fill"
 							viewBox="0 0 16 16"
 						>
 							<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
@@ -176,7 +179,8 @@ function SurveyRow(props) {
 					loggedIn={props.loggedIn}
 					answersSheet={answersSheet}
 					setAnswersSheet={setAnswersSheet}
-					loading={props.loading}
+					loading={loading}
+					setLoading={setLoading}
 				></ModalAnswerSheet>
 			) : (
 				""

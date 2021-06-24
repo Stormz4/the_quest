@@ -45,9 +45,9 @@ function AnswerSheetRow(props) {
         opt = opt.filter((item) => item != null);
         opt = opt.filter((item) => item.ref_q === id);
 
-        return opt.map((item)=>(
+        return opt.map((item, index)=>(
             (
-			<Form.Group >
+			<Form.Group key={index} >
 				<Form.Check type="checkbox" value={props.answers} 
 					readOnly={props.loggedIn}
 					checked={evaluateCheck(item)}

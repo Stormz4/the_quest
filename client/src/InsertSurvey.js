@@ -33,6 +33,8 @@ function InsertSurvey(props) {
 					setQuestion={setQuestion}
 					item={item}
 					id={index}
+					key={index}
+					setErrorMessage={setErrorMessage}
 				></InsertSurveyRow>
 			));
 		}
@@ -127,6 +129,7 @@ function InsertSurvey(props) {
 					setType={setType}
 					question={question}
 					setQuestion={setQuestion}
+					setErrorMessage={setErrorMessage}
 				></ModalInsertSurvey>
 
 				<hr></hr>

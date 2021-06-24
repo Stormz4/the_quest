@@ -22,7 +22,7 @@ import { useState } from "react";
 */
 
 function ModalInsertSurvey(props) {
-	const [question, setQuestion] = useState();
+	const [question, setQuestion] = useState("");
 
 	// Closed question
 	const [min, setMin] = useState(0);
@@ -33,7 +33,7 @@ function ModalInsertSurvey(props) {
 	const [maxChar, setMaxChar] = useState(0);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [showAnswer, setShowAnswer] = useState(true)
-
+	
 	// Closed
 	const [required, setRequired] = useState(false);
 
@@ -64,17 +64,17 @@ function ModalInsertSurvey(props) {
 		setN(1)
 		setMaxChar(1)
 		setRequired(false)
-		setShowAnswer(false)
+		setShowAnswer(true)
 		setErrorMessage("")
 		setAnswers([]);
 		setGenAnswers([]);
+		props.setErrorMessage("")
 		props.setShow(false);
 		
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-
 		if ((min <= max) && (max <= nAns)) {
 			let questionComplete;
 			if (props.type === 1) {
@@ -100,10 +100,13 @@ function ModalInsertSurvey(props) {
 			let newQuestion = [...props.question, questionComplete];
 			props.setQuestion(newQuestion);
 			handleClose();
-		} else {
+		} else if (min > max) {
 			setErrorMessage(
-				"Min must be below or equal to max / max must be below or equal number of answers."
+				"Min must be below or equal to max."
 			);
+		} else {
+			setErrorMessage("Max must be below or equal the number of answers to choose from.");
+
 		}
 		
 	};
@@ -147,7 +150,7 @@ function ModalInsertSurvey(props) {
 											<Form.Control
 												as="select"
 												required
-												onChange={(ev) => setMin(ev.target.value)}
+												onChange={(ev) => setMin(+ev.target.value)}
 											>
 												<option value="0">0</option>
 												<option value="1">1</option>
@@ -169,7 +172,7 @@ function ModalInsertSurvey(props) {
 											<Form.Control
 												as="select"
 												required
-												onChange={(ev) => setMax(ev.target.value)}
+												onChange={(ev) => setMax(+ev.target.value)}
 											>
 												<option value="1">1</option>
 												<option value="2">2</option>
@@ -189,7 +192,8 @@ function ModalInsertSurvey(props) {
 												as="select"
 												required
 												onChange={(ev) => {
-													setN(ev.target.value);
+													
+													setN(+ev.target.value);
 													setShowAnswer(true);
 												}}
 											>
@@ -208,7 +212,7 @@ function ModalInsertSurvey(props) {
 										{showAnswer
 									? generateAnswer(nAns)
 									: answers.map((item, index) => (
-											<Form.Group>
+											<Form.Group key={index}>
 												<Form.Label>Insert the answer </Form.Label>
 												<Form.Control
 													name="answer"
