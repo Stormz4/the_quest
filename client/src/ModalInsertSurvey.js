@@ -80,8 +80,8 @@ function ModalInsertSurvey(props) {
 			if (props.type === 1) {
 				questionComplete = {
 					question: question,
-					min: min,
-					max: max,
+					min: +min,
+					max: +max,
 					answers: genAnswers,
 					open: 0,
 					required: null,
@@ -90,7 +90,7 @@ function ModalInsertSurvey(props) {
 				questionComplete = {
 					question: question,
 					required: +required,
-					max: maxChar,
+					max: +maxChar,
 					min: null,
 					open: 1,
 					answers: null,

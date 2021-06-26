@@ -50,6 +50,7 @@ function InsertSurvey(props) {
 				setType(-1);
 				props.setDirty(true);
 				setErrorMessage("")
+				console.log("PROVA")
 				history.push("/admin")
 			})
 			.catch(function (error) {
@@ -59,7 +60,6 @@ function InsertSurvey(props) {
 	}
 	const handleSubmit = (event) =>{
 		event.preventDefault();
-		
 		if (title !== undefined && title!=="" && question.length > 0){
 			addSurvey(title, question)
 		}

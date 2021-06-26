@@ -61,12 +61,13 @@ function AnswerSheetRow(props) {
 							props.setAnswers(arr);
 						}
 						else{
-							// If a check has been removed, remove the option by iterating all the answers made and removing the one with the same option_text
+							// If a check has been removed, remove the option by iterating all the 
+							// answers made and removing the one with the same option_text
 							// of the item rendered.
 							let arr = [...props.answers]
 							
 							for (let i=0; i<arr.length; i++){
-								if (arr[i].answer === item.option_text){
+								if (arr[i].id_question === item.id){
 									arr.splice(i,1);
 									break;
 								}

@@ -173,6 +173,7 @@ app.post(
 				break;
 			}
 			
+			// Open question
 			if (question.open == 1){
 				if (question.min != null || question.required === null || question.required === undefined 
 					|| question.answers != null || question.max <= 0 || question.max > 200){
@@ -180,6 +181,7 @@ app.post(
 					break;
 				}
 			}
+			// Closed question
 			else{
 				if (question.required != null || !question.answers || question.min === null || 
 					question.min===undefined || question.min < 0 || question.max > 10 || question.answers.length > 10){
@@ -204,7 +206,26 @@ app.post(
 			return res.status(422).json({ errors: errors.array() });
 		}
 		try {
-			await dao.createSurvey(req.body.title, req.user.id, req.body.questions);
+
+			/* 
+				First, I need to insert the Survey and obtain it's hid.
+				Then, for each question, call the dao function and insert a question.
+				In this way, the handling of multiple resolve is not needed.
+				Then, for each question, verify if it's open or closed. 
+				If it's closed, insert the answers (depending on the lenght of the answers array)
+			*/
+			
+			let questions = req.body.questions;
+			let idS = await dao.createSurvey(req.body.title, req.user.id, questions);
+			let idQ;
+			for (let i=0; i<questions.length; i++){
+				idQ = await dao.createQuestion(idS, questions[i], i);
+				if (questions[i].open === 0 ) {
+					for (let j = 0; j < questions[i].answers.length; j++) {
+						await dao.createAnswers(idQ, questions[i].answers[j])
+					}
+				}
+			}
 			res.status(201).end();
 		} catch (err) {
 			console.log(err);

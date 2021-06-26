@@ -61,6 +61,7 @@ async function addSurvey(title, questions){
 			questions:questions
             }
         );
+		console.log(res)
         return res;
     }catch(error) {
             console.log(error);

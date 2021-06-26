@@ -26,11 +26,11 @@ function ModalAnswerSheet(props) {
 
 	const handleClose = () => {
 		props.setShow(false);
-		/*
+		
 		setName("")
 		setAnswers([])
-		props.setAnswersSheet([]);
-		*/
+		//props.setAnswersSheet([]);
+		
 		setIndex(0)
 		setErrorMessage("")
 
@@ -73,8 +73,8 @@ function ModalAnswerSheet(props) {
 			return props.answersSheet[indexSheet][1][0].name;
 		} else return "Insert your answer.";
 	}
-	const submitAnswers = async(ans, s, n) =>{
-		API.submitAnswers(ans, s, n)
+	const submitAnswers = async(answersInserted, surveyChoosen, userName) =>{
+		API.submitAnswers(answersInserted, surveyChoosen, userName)
 		.then(() => {
 				handleClose();
 			})
@@ -90,8 +90,11 @@ function ModalAnswerSheet(props) {
 		let counter=0;
 		let errorName;
 		if (surveyQuestions !== undefined || surveyQuestions.length > 0){
+
 			for (const question of surveyQuestions){
+				console.log("QUESTION:", question);
 				// For each question, get all the answers with the same id and verify the costraints
+				console.log("ANS:", answers)
 				for (const answer of answers){
 					if (question.id === answer.id_question){
 						if(answer.open === 0){
@@ -99,9 +102,16 @@ function ModalAnswerSheet(props) {
 						}
 					}
 				}
+				console.log("COUNTER:", counter)
+				console.log("MIN:", question.min)
+				console.log("MAX:", question.max)
+
+
+				// If the number of checked answers is below the min or bigger than the max, return an error and set the message
 				if (counter < question.min || counter > question.max){
 					errors++;
 					errorName = question.question;
+					counter=0; 
 					break;
 				}
 				counter=0; // Reset it for the next question

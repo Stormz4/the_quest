@@ -63,13 +63,11 @@ exports.getAllSurveys = () => {
 			}));
 			resolve(surveys);
 		});
-
 	});
 };
 
 // Insert a survey, the questions made for it and all the options
 exports.createSurvey = (title, admin, questions) => {
-
 	return new Promise((resolve, reject) => {
 		const sql = "INSERT INTO survey (ref_a, title) VALUES(?, ?)";
 		db.run(sql, [admin, title], function (err) {
@@ -77,54 +75,53 @@ exports.createSurvey = (title, admin, questions) => {
 				reject(err);
 				return;
 			}
-			let idS = this.lastID;
-			for (let i = 0; i < questions.length; i++) {
-				const sql2 =
-				// The order value will be the index of the element in the array
-					"INSERT INTO question (ref_s, question, min, max, open, required, position) VALUES (?, ?, ?, ?, ?, ?, ?)";
-					db.run(
-					sql2,[idS,
-						questions[i].question,
-						questions[i].min,
-						questions[i].max,
-						questions[i].open,
-						questions[i].required,
-						i
-					],
-					function (err) {
-						if (err) {
-							reject(err);
-							return;
-						}
-						let idQ = this.lastID;
-						if (questions[i] != undefined && questions[i].answers != null && questions[i].answers!=undefined) {
+			resolve(this.lastID);
+		});
+	});
+};
 
-							const sql3 =
-								"INSERT INTO option(ref_q, option_text) VALUES (?, ?)";
-							
-							for (let j = 0; j < questions[i].answers.length; j++) {
-								db.run(sql3, [idQ, questions[i].answers[j]], function (err) {
-									if (err) {
-										reject(err);
-										return;
-									}
-									// The promise is solved at the end of the cascade, because otherwise a promise
-									// could've been returned before the end.
-									// This would've caused a wrong response to the front end.
-									resolve(idS);
-								});
-							}
-						}
-					}
-				);
+exports.createQuestion = (idS, question, index) => {
+	return new Promise((resolve, reject) => {
+		const sql2 =
+			// The order value will be the index of the element in the array
+			"INSERT INTO question (ref_s, question, min, max, open, required, position) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		db.run(
+			sql2,
+			[
+				idS,
+				question.question,
+				question.min,
+				question.max,
+				question.open,
+				question.required,
+				index,
+			],
+			function (err) {
+				if (err) {
+					reject(err);
+					return;
+				}
+				resolve(this.lastID)
 			}
-			//resolve(idS);
+		);
+	});
+};
+
+exports.createAnswers = (idQ, answer) => {
+	return new Promise((resolve, reject) => {
+		const sql3 = "INSERT INTO option(ref_q, option_text) VALUES (?, ?)";
+		db.run(sql3, [idQ, answer], function (err) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve(this.lastID);
 		});
 	});
 };
 
 // Create a new answer sheet and insert all the answers that have been made.
-exports.submitSurvey= (answers, survey, name) => {
+exports.submitSurvey = (answers, survey, name) => {
 	return new Promise((resolve, reject) => {
 		const sql = "INSERT INTO answer_sheet (name, ref_s) VALUES(?, ?)";
 		db.run(sql, [name, survey.id], function (err) {
@@ -136,28 +133,31 @@ exports.submitSurvey= (answers, survey, name) => {
 			// Iterate over each answers
 			const sql2 =
 				"INSERT INTO answer (ref_q, answer_text, ref_as, ref_op) VALUES (?, ?, ?, ?)";
-			if (answers.length > 0 ){
-				for (const answer of answers){
-					db.run(sql2, [answer.id_question, answer.answer, idA, answer.ref_op], function (err){
-						if (err) {
-							reject(err);
-							return;
+			if (answers.length > 0) {
+				for (const answer of answers) {
+					db.run(
+						sql2,
+						[answer.id_question, answer.answer, idA, answer.ref_op],
+						function (err) {
+							if (err) {
+								reject(err);
+								return;
+							}
+							resolve(idA);
 						}
-						resolve(idA)
-					})
+					);
 				}
 			}
 			// In the case where a survey contains only a question, which is not required.
-			else{
-				db.run(sql2, [null, " ", idA, null], function (err){
+			else {
+				db.run(sql2, [null, " ", idA, null], function (err) {
 					if (err) {
 						reject(err);
 						return;
 					}
-					resolve(idA)
-				})
+					resolve(idA);
+				});
 			}
-
 		});
 	});
 };
@@ -165,17 +165,16 @@ exports.submitSurvey= (answers, survey, name) => {
 // Get a survey by it's id and all of its questions
 exports.getSurveyById = (id) => {
 	return new Promise((resolve, reject) => {
-
 		// Obtain all the questions for a given Survey
-		
-		const sql =
-		`SELECT Q.id, Q.question, Q.min, Q.max, O.ref_q, O.id as id_option,
+
+		const sql = `SELECT Q.id, Q.question, Q.min, Q.max, O.ref_q, O.id as id_option,
 			 Q.required, Q.open, O.option_text
 		FROM question Q 
 			LEFT JOIN option O on O.ref_Q = Q.id  
 		WHERE Q.ref_s = ?
-		ORDER BY Q.position ASC`;
-			
+		ORDER BY Q.position, O.id  ASC`;
+
+		// First ordered by the position, by the option id
 		db.all(sql, [id], (err, rows) => {
 			if (err) {
 				reject(err);
@@ -183,8 +182,8 @@ exports.getSurveyById = (id) => {
 			}
 			let survey;
 			let options = [];
-			let i=0;
-			
+			let i = 0;
+
 			// Create an array of options, where all the options data will be stored.
 			// If a question is open, null will be pushed. Otherwise,
 			// a new element will be pushed containing:
@@ -192,37 +191,38 @@ exports.getSurveyById = (id) => {
 			// This array will be handled properly by the front end.
 			// Duplicates and null elements will be removed.
 			// This solution was made in order to obtain only one resolve.
-			
-			for (i; i<rows.length; i++){
-				if (rows[i].open == 1){
+
+			for (i; i < rows.length; i++) {
+				if (rows[i].open == 1) {
 					options.push(null);
-				}
-				
-				else if (rows[i].open == 0) {
-					options.push({index: i, id: rows[i].id, id_option:rows[i].id_option, ref_q: rows[i].ref_q, option_text: rows[i].option_text});
+				} else if (rows[i].open == 0) {
+					options.push({
+						index: i,
+						id: rows[i].id,
+						id_option: rows[i].id_option,
+						ref_q: rows[i].ref_q,
+						option_text: rows[i].option_text,
+					});
 				}
 			}
-		
+
 			survey = rows.map((e) => ({
-						id: e.id,
-						question: e.question,
-						min: e.min,
-						ref_q: e.ref_q,
-						max: e.max,
-						open: e.open,
-						required: e.required,
-						options: options,
+				id: e.id,
+				question: e.question,
+				min: e.min,
+				ref_q: e.ref_q,
+				max: e.max,
+				open: e.open,
+				required: e.required,
+				options: options,
 			}));
 
 			resolve(survey);
-
 		});
-		
 	});
 };
 
 exports.getAllSurveysById = (id) => {
-
 	return new Promise((resolve, reject) => {
 		const sql = `SELECT S.id, S.title, A.name, count(A2.id) AS n_submissions 
 			FROM admin A, survey S 
@@ -238,10 +238,9 @@ exports.getAllSurveysById = (id) => {
 				id: e.id,
 				title: e.title,
 				adminName: e.name,
-				n_submissions: e.n_submissions
+				n_submissions: e.n_submissions,
 			}));
 
-			
 			resolve(surveys);
 		});
 	});
@@ -250,8 +249,7 @@ exports.getAllSurveysById = (id) => {
 exports.getAnswerSheetsById = (id) => {
 	return new Promise((resolve, reject) => {
 		// Obtain all the questions for a given Survey
-		const sql =
-			`SELECT A.id, A.ref_as, A.answer_text, A.ref_q, A.ref_op, A2.name, A2.ref_s 
+		const sql = `SELECT A.id, A.ref_as, A.answer_text, A.ref_q, A.ref_op, A2.name, A2.ref_s 
 			FROM answer A, answer_sheet A2 WHERE A2.ref_s = ? AND A.ref_as = A2.id`;
 
 		db.all(sql, [id], (err, rows) => {
@@ -259,7 +257,7 @@ exports.getAnswerSheetsById = (id) => {
 				reject(err);
 				return;
 			}
-			
+
 			const answers = rows.map((e) => ({
 				id: e.id,
 				ref_as: e.ref_as,
@@ -267,7 +265,7 @@ exports.getAnswerSheetsById = (id) => {
 				ref_q: e.ref_q,
 				name: e.name,
 				ref_s: e.ref_s,
-				ref_op: e.ref_op
+				ref_op: e.ref_op,
 			}));
 
 			resolve(answers);
