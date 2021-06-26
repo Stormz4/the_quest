@@ -4,9 +4,9 @@ import axios from "axios";
 	API.js contains all the API calls and the methods that communicate with the backend.
 */
 
-const BASEURL = '/api';
+const BASEURL = "/api";
 
-async function getAllSurveys(){
+async function getAllSurveys() {
 	let url = BASEURL + `/surveys`;
 	try {
 		const res = await axios.get(url);
@@ -14,7 +14,6 @@ async function getAllSurveys(){
 		return data;
 	} catch (error) {
 		console.log(error);
-
 	}
 }
 
@@ -29,7 +28,6 @@ async function getAllSurveysById() {
 	}
 }
 
-
 async function getSurveyById(id) {
 	let url = BASEURL + `/surveys/id=${id}`;
 	try {
@@ -40,7 +38,6 @@ async function getSurveyById(id) {
 		console.log(error);
 	}
 }
-
 
 async function getAnswerSheetsById(id) {
 	let url = BASEURL + `/answers/id=${id}`;
@@ -53,20 +50,19 @@ async function getAnswerSheetsById(id) {
 	}
 }
 
-async function addSurvey(title, questions){
-	let url = BASEURL+"/surveys";
-    try{
-        const res = await axios.post(url,{ 
-            title: title,
-			questions:questions
-            }
-        );
-		console.log(res)
-        return res;
-    }catch(error) {
-            console.log(error);
-            alert("Si è verificato un errore, riprova.");
-     };
+async function addSurvey(title, questions) {
+	let url = BASEURL + "/surveys";
+	try {
+		const res = await axios.post(url, {
+			title: title,
+			questions: questions,
+		});
+		console.log(res);
+		return res;
+	} catch (error) {
+		console.log(error);
+		alert("Si è verificato un errore, riprova.");
+	}
 }
 
 async function submitAnswers(answers, survey, name) {
@@ -84,26 +80,25 @@ async function submitAnswers(answers, survey, name) {
 	}
 }
 
-
 async function login(credentials) {
-    let response = await fetch("/api/login", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(credentials),
-		});
-		if (response.ok) {
-			const user = await response.json();
-			return user;
-		} else {
-			try {
-				const errDetail = await response.json();
-				throw errDetail.message;
-			} catch (err) {
-				throw err;
-			}
+	let response = await fetch("/api/login", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(credentials),
+	});
+	if (response.ok) {
+		const user = await response.json();
+		return user;
+	} else {
+		try {
+			const errDetail = await response.json();
+			throw errDetail.message;
+		} catch (err) {
+			throw err;
 		}
+	}
 }
 
 async function logout() {
@@ -120,8 +115,6 @@ async function getAdminInfo() {
 	}
 }
 
-
-
 const API = {
 	getAllSurveys,
 	login,
@@ -131,6 +124,6 @@ const API = {
 	addSurvey,
 	getSurveyById,
 	submitAnswers,
-	getAnswerSheetsById
+	getAnswerSheetsById,
 };
 export default API;

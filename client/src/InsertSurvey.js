@@ -50,7 +50,6 @@ function InsertSurvey(props) {
 				setType(-1);
 				props.setDirty(true);
 				setErrorMessage("")
-				console.log("PROVA")
 				history.push("/admin")
 			})
 			.catch(function (error) {

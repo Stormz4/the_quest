@@ -101,7 +101,7 @@ exports.createQuestion = (idS, question, index) => {
 					reject(err);
 					return;
 				}
-				resolve(this.lastID)
+				resolve(this.lastID);
 			}
 		);
 	});
@@ -168,11 +168,11 @@ exports.getSurveyById = (id) => {
 		// Obtain all the questions for a given Survey
 
 		const sql = `SELECT Q.id, Q.question, Q.min, Q.max, O.ref_q, O.id as id_option,
-			 Q.required, Q.open, O.option_text
-		FROM question Q 
-			LEFT JOIN option O on O.ref_Q = Q.id  
-		WHERE Q.ref_s = ?
-		ORDER BY Q.position, O.id  ASC`;
+						Q.required, Q.open, O.option_text
+					FROM question Q 
+						LEFT JOIN option O on O.ref_Q = Q.id  
+					WHERE Q.ref_s = ?
+					ORDER BY Q.position, O.id  ASC`;
 
 		// First ordered by the position, by the option id
 		db.all(sql, [id], (err, rows) => {

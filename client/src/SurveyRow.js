@@ -13,18 +13,17 @@ import API from "./API";
 	This component also handles and transform the survey/answer sheets objects in order to work with them in an easier manner.
 	(All the questions and, if it's made by an admin, all the answer sheets related to the survey.)
 
-	If the data for a certain 
 */
 
 function SurveyRow(props) {
 	const [show, setShow] = useState(false);
-	const [answersSheet, setAnswersSheet] = useState([])
+	const [answersSheet, setAnswersSheet] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	const handleSurvey = async (id) => {
 		const getSurveyById = async (id) => {
 			const survey = await API.getSurveyById(id);
-			
+
 			/* Survey:
 			0:
 				id: 7
@@ -47,7 +46,8 @@ function SurveyRow(props) {
 			// I remove in this case all the rows that contain a duplicated id
 			// filter((element, index, array) => { ... } )
 			let s2 = survey.filter(
-				(element, index, array) => array.findIndex((t) => t.id === element.id) === index
+				(element, index, array) =>
+					array.findIndex((t) => t.id === element.id) === index
 			);
 			/*
 			s2:
@@ -93,7 +93,7 @@ function SurveyRow(props) {
 				acc[currVal.ref_as] = [...(acc[currVal.ref_as] || []), currVal];
 				return acc;
 			}, {});
-			
+
 			/*
 			arr={
 				27: Array(6)
@@ -113,13 +113,12 @@ function SurveyRow(props) {
 					1: (2) ["28", Array(5)]
 			}
 			*/
-			setAnswersSheet(Object.entries(arr))
-
+			setAnswersSheet(Object.entries(arr));
 		};
 
 		setLoading(true);
-		if (props.loggedIn){
-			getAnswerSheetsById(id).then(()=> {
+		if (props.loggedIn) {
+			getAnswerSheetsById(id).then(() => {
 				setShow(true);
 			});
 		}
@@ -127,7 +126,6 @@ function SurveyRow(props) {
 			setShow(true);
 			setLoading(false);
 		});
-		
 	};
 
 	return (
@@ -135,22 +133,21 @@ function SurveyRow(props) {
 			<Row>
 				<Col lg={10} className="m-0 p-0">
 					<h2>{props.item.title}</h2>
-					
-						<i>made by {props.item.adminName}</i>
-						{props.loggedIn ? (
-							<i>
-								, compiled by: {props.surveyList[props.index].n_submissions}{" "}
-								persons
-							</i>
-						) : (
-							""
-						)}
-					
+
+					<i>made by {props.item.adminName}</i>
+					{props.loggedIn ? (
+						<i>
+							, compiled by: {props.surveyList[props.index].n_submissions}{" "}
+							persons
+						</i>
+					) : (
+						""
+					)}
 				</Col>
 				<Col lg={2} className="m-0 p-0">
 					<Button
 						variant="outline-success"
-						disabled={props.surveyList[props.index].n_submissions===0}
+						disabled={props.surveyList[props.index].n_submissions === 0}
 						onClick={() => {
 							handleSurvey(props.item.id);
 						}}

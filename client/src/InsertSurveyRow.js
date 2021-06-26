@@ -1,5 +1,4 @@
-
-import { Col, Row, ListGroup, Button} from "react-bootstrap";
+import { Col, Row, ListGroup, Button } from "react-bootstrap";
 /*
 	This component represents a question row renderer in the Insert Survey page.
 	It contains the buttons used to move up, move down and delete a question.
@@ -7,41 +6,38 @@ import { Col, Row, ListGroup, Button} from "react-bootstrap";
 
 function InsertSurveyRow(props) {
 
-
-	const moveUp = () =>{
-		let q = [...props.question]
+	const moveUp = () => {
+		let q = [...props.question];
 		if (props.id === 0) {
 			props.setErrorMessage("The element is at the top");
-		}
-		else{
+		} else {
 			// Swap with the element before
 			let tmp = q[props.id];
-			q[props.id] = q[props.id-1]
-			q[props.id-1] = tmp;
-			props.setQuestion(q)
+			q[props.id] = q[props.id - 1];
+			q[props.id - 1] = tmp;
+			props.setQuestion(q);
 			props.setErrorMessage("");
 		}
-	}
+	};
 
-	const moveDown = () =>{
+	const moveDown = () => {
 		let q = [...props.question];
-		if (props.id+1 === props.question.length) {
+		if (props.id + 1 === props.question.length) {
 			props.setErrorMessage("The element is at the bottom");
-		}else {
-
+		} else {
 			let tmp = q[props.id];
 			q[props.id] = q[props.id + 1];
 			q[props.id + 1] = tmp;
 			props.setQuestion(q);
 			props.setErrorMessage("");
 		}
-	}
+	};
 
-	const handleDelete = () =>{
+	const handleDelete = () => {
 		let q = [...props.question];
 		q.splice(props.id, 1);
 		props.setQuestion(q);
-	}
+	};
 
 	function renderItem() {
 		// Closed question
@@ -103,12 +99,11 @@ function InsertSurveyRow(props) {
 								</Button>
 							</Col>
 						</h2>
-							<i>
-								min: {props.item.min}, max: {props.item.max}
-							</i>
-							<br></br>
-							Answers: <br></br>
-
+						<i>
+							min: {props.item.min}, max: {props.item.max}
+						</i>
+						<br></br>
+						Answers: <br></br>
 						{props.item.answers.map((value, index) => (
 							<i key={index}>
 								{index + 1}. {value}
@@ -124,7 +119,6 @@ function InsertSurveyRow(props) {
 				<Row>
 					<Col className="justify-content-center m-0 p-0">
 						<h2>
-							
 							{props.id + 1}. Open question: {props.item.question}
 							<Col>
 								<Button variant="danger" className="p-2" onClick={handleDelete}>
@@ -180,12 +174,11 @@ function InsertSurveyRow(props) {
 						</h2>
 
 						{props.item.required ? (
-								<i>It is required.</i>
+							<i>It is required.</i>
 						) : (
-								<i>It's not required.</i>
+							<i>It's not required.</i>
 						)}
-							<i> Max {props.item.max} chars for the answer.</i>
-
+						<i> Max {props.item.max} chars for the answer.</i>
 					</Col>
 				</Row>
 			);

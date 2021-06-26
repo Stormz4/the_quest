@@ -52,8 +52,6 @@ function ModalInsertSurvey(props) {
 			setErrorMessage("Max must be major or equal to the number of answers.");
 		}
 		setShowAnswer(false);
-		
-        
 
     };
 

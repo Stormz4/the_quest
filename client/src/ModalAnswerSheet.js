@@ -92,9 +92,8 @@ function ModalAnswerSheet(props) {
 		if (surveyQuestions !== undefined || surveyQuestions.length > 0){
 
 			for (const question of surveyQuestions){
-				console.log("QUESTION:", question);
+
 				// For each question, get all the answers with the same id and verify the costraints
-				console.log("ANS:", answers)
 				for (const answer of answers){
 					if (question.id === answer.id_question){
 						if(answer.open === 0){
@@ -102,9 +101,6 @@ function ModalAnswerSheet(props) {
 						}
 					}
 				}
-				console.log("COUNTER:", counter)
-				console.log("MIN:", question.min)
-				console.log("MAX:", question.max)
 
 
 				// If the number of checked answers is below the min or bigger than the max, return an error and set the message
