@@ -14,7 +14,6 @@ function AnswerSheetRow(props) {
 
 	// This method checks if an answer present in the answer sheet contain the same option id (ref_option) of the item rendered.
 	const evaluateCheck = (item) => {
-
 		if (props.answersSheet !== undefined) {
 			for (const answer of props.answersSheet[1]) {
 				if (answer.ref_op === item.id_option) return true;
@@ -25,13 +24,21 @@ function AnswerSheetRow(props) {
 
 	// This method checks if an answer present in the answer sheet contain the same id (ref_question) of the item rendered.
 	const evaluatePlaceholder = () => {
-		if (props.answersSheet !== undefined) {
+		if (props.loggedIn && props.answersSheet !== undefined) {
 			for (const answer of props.answersSheet[1]) {
 				if (answer.ref_q === id) {
 					return answer.answer_text;
 				}
 			}
-		} else return "Insert your answer.";
+			return ""
+		}
+		else{
+			for (let answer of props.answers){
+				if (answer.index === props.index)
+					return answer.answer
+			}
+			return "";
+		}
 	};
 
 	// This method is used to render all the options in the case of a closed answer.
@@ -42,13 +49,13 @@ function AnswerSheetRow(props) {
 		opt = opt.filter((item) => item.id === id);
 
 		// After processing the array, render all the options present for the current question
+
 		return opt.map((item, index) => (
 			<Form.Group key={index}>
 				<Form.Check
 					type="checkbox"
-					value={props.answers}
-					readOnly={props.loggedIn}
-					checked={evaluateCheck(item)}
+					readOnly={props.loggedIn ? true : false}
+					checked={props.loggedIn && evaluateCheck(item)}
 					label={item.option_text}
 					onChange={(ev) => {
 						if (ev.target.checked === true) {
@@ -62,21 +69,20 @@ function AnswerSheetRow(props) {
 									open: 0,
 								},
 							];
-							
+
 							props.setAnswers(arr);
 						} else {
 							// If a check has been removed, remove the option by iterating all the
 							// answers made and removing the one with the same id_option
 							let arr = [...props.answers];
-							
+
 							for (let i = 0; i < arr.length; i++) {
-								
 								if (arr[i].ref_op === item.id_option) {
 									arr.splice(i, 1);
 									break;
 								}
 							}
-							
+
 							props.setAnswers(arr);
 						}
 					}}
@@ -94,20 +100,20 @@ function AnswerSheetRow(props) {
 							<i>{props.item.question}</i>
 						</h6>
 					</Form.Label>
-					<Form.Control 
+					<Form.Control
 						as="textarea"
 						name="answers"
-						readOnly={props.loggedIn}
-						placeholder={evaluatePlaceholder()}
+						readOnly={props.loggedIn ? true : false}
+						value={evaluatePlaceholder()}
 						type="text"
 						maxLength={props.item.max}
 						required={props.item.required}
 						onChange={(ev) => {
 							let arr = [
 								...props.answers,
-								{ id_question: id, answer: ev.target.value, open: 1 },
+								{ id_question: id, answer: ev.target.value, open: 1, index: props.index},
 							];
-							
+
 							for (let i = 0; i < arr.length - 1; i++) {
 								// Verifify if there is another answer with the same ID
 								// When the state is an array and you write a char in a form, a new element will be pushed.

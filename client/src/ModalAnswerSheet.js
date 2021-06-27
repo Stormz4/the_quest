@@ -142,7 +142,7 @@ function ModalAnswerSheet(props) {
 								<Form.Label>Insert your name.</Form.Label>
 								<Form.Control
 									name="name"
-									readOnly={props.loggedIn}
+									readOnly={props.loggedIn ? true : false }
 									required
 									value={name}
 									placeholder={evaluatePlaceholderName()}

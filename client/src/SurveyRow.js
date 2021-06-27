@@ -120,9 +120,7 @@ function SurveyRow(props) {
 
 		setLoading(true);
 		if (props.loggedIn) {
-			getAnswerSheetsById(id).then(() => {
-				setShow(true);
-			});
+			getAnswerSheetsById(id)
 		}
 		getSurveyById(id).then(() => {
 			setShow(true);
