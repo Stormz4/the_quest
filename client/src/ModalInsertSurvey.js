@@ -177,8 +177,7 @@ function ModalInsertSurvey(props) {
 											</Form.Control>
 										</Form.Group>
 										<Form.Group>
-											<Form.Label>Insert the number of answers to choose from. 
-												After inserting it, it's not editable. Close and open the form again.</Form.Label>
+											<Form.Label>Insert the number of answers to choose from. </Form.Label>
 											<Form.Control
 												as="select"
 												value={nAns}
