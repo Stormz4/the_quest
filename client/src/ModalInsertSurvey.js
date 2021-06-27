@@ -10,15 +10,8 @@ import { useState } from "react";
 	a state "ShowAnswer" is set to true (it starts as true originally). If that state is true, a method is called 
 	which pushes n (depending on the number of answers) empty elements to an array. 
 	This array is used then to render n form input. Each form input will insert elements ONLY in the slot of his index
-	thanks to slice(start, end), in this case (0, index).
 	If i generate 3 forms for each answers, form n°0 will insert elements only in genAnswers[0].
-	The instruction:
-		setGenAnswers([...genAnswers.slice(0, index),ev.target.value]) takes the old array, 
-		gets all the elements contained between 0 and index (slices it) and then inserts the new value.
-		This solution is used in order to fix the problems regarding handling states which are array.
 
-		When the state is an array and you write a char in a form, a new element will be pushed.
-		If i have my string "ab" and i write b, "abc" will be pushed.
 */
 
 function ModalInsertSurvey(props) {

@@ -85,7 +85,8 @@
           - Answers = [{
              - `id_question`: id of the question, 
              - `answer`: value of the answer,
-             - `open`:  0 if it's a closed question, 1 otherwise
+             - `open`:  0 if it's a closed question, 1 otherwise, 
+             - `index`: index of the answer
            },{...}]. 
           
           - If it's an answer for a closed question = [{ 
