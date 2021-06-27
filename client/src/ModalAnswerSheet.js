@@ -22,21 +22,21 @@ function ModalAnswerSheet(props) {
 
 	let surveyQuestions = props.survey;
 	let survey = props.item;
-
+	
 
 	const handleClose = () => {
 		props.setShow(false);
 		
 		setName("")
 		setAnswers([])
-		//props.setAnswersSheet([]);
+
 		
 		setIndex(0)
 		setErrorMessage("")
 
 	};
 
-	const renderForm = (values, handleChange) => {
+	const renderForm = (handleChange) => {
 
 		if (surveyQuestions !== undefined && surveyQuestions.length > 0 ) {
 			return surveyQuestions.map((item, index) => (
@@ -84,7 +84,7 @@ function ModalAnswerSheet(props) {
 			});
 	}
 
-	const handleSubmit = (event, values) => {
+	const handleSubmit = (event) => {
 		event.preventDefault();
 		let errors=0;
 		let counter=0;
@@ -131,14 +131,11 @@ function ModalAnswerSheet(props) {
 				</Modal.Header>
 				<Modal.Body style={{ textAlign: "center" }}>
 					<Formik
-						initialValues={{
-							answers: Array(surveyQuestions.length).fill(""),
-						}}
 					>
-						{({ handleChange, values, errors, touched }) => (
+						{({ handleChange,errors, touched }) => (
 							<Form
 								onSubmit={(ev) => {
-									handleSubmit(ev, values.answers);
+									handleSubmit(ev);
 								}}
 							>
 								
@@ -165,7 +162,7 @@ function ModalAnswerSheet(props) {
 												<br></br>
 												<h3>🕗 Please wait, loading your surveys... 🕗</h3>
 											</>
-										) : renderForm(values, handleChange)}
+										) : renderForm(handleChange)}
 								<Modal.Footer className="justify-content-center ">
 									{props.loggedIn ? (
 										<>

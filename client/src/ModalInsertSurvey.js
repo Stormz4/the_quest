@@ -33,7 +33,6 @@ function ModalInsertSurvey(props) {
 	const [maxChar, setMaxChar] = useState(0);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [showAnswer, setShowAnswer] = useState(true)
-	
 	// Closed
 	const [required, setRequired] = useState(false);
 
@@ -46,6 +45,7 @@ function ModalInsertSurvey(props) {
 				arr.push("")
 		}
 		setAnswers(arr);
+		
 		setGenAnswers(arr);
 		setShowAnswer(false);
 
@@ -69,6 +69,7 @@ function ModalInsertSurvey(props) {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
+
 		if ((min <= max) && (max <= nAns)) {
 			let questionComplete;
 			if (props.type === 1) {
@@ -143,6 +144,7 @@ function ModalInsertSurvey(props) {
 											</Form.Label>
 											<Form.Control
 												as="select"
+												value={min}
 												required
 												onChange={(ev) => setMin(+ev.target.value)}
 											>
@@ -165,6 +167,7 @@ function ModalInsertSurvey(props) {
 											</Form.Label>
 											<Form.Control
 												as="select"
+												value={max}
 												required
 												onChange={(ev) => setMax(+ev.target.value)}
 											>
@@ -181,14 +184,17 @@ function ModalInsertSurvey(props) {
 											</Form.Control>
 										</Form.Group>
 										<Form.Group>
-											<Form.Label>Insert the number of answers to choose from. </Form.Label>
+											<Form.Label>Insert the number of answers to choose from. 
+												After inserting it, it's not editable. Close and open the form again.</Form.Label>
 											<Form.Control
 												as="select"
+												value={nAns}
 												required
 												onChange={(ev) => {
 													
 													setN(+ev.target.value);
 													setShowAnswer(true);
+
 												}}
 											>
 												<option value="1">1</option>
@@ -210,15 +216,18 @@ function ModalInsertSurvey(props) {
 												<Form.Label>Insert the answer </Form.Label>
 												<Form.Control
 													name="answer"
-													value={genAnswers[index]}
+													value={genAnswers[index] || ""}
 													required
 													placeholder="Insert your answer"
 													type="string"
-													onChange={(ev) =>
-														setGenAnswers([
-															...genAnswers.slice(0, index),
-															ev.target.value,
-														])
+													onChange={(ev) => {
+														let arr = [...genAnswers];
+														arr[index] = ev.target.value;
+														
+														setGenAnswers(arr)
+
+														
+													}
 													}
 												/>
 											</Form.Group>
