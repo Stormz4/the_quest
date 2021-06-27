@@ -41,16 +41,12 @@ function ModalInsertSurvey(props) {
 	function generateAnswer(nAnswers){
 
 		let arr = [];
-		if (max>0 && max <= nAnswers){
-			for (let i=0; i<nAnswers; i++){
+		
+		for (let i=0; i<nAnswers; i++){
 				arr.push("")
-			}
-			setAnswers(arr);
-
 		}
-		else {
-			setErrorMessage("Max must be major or equal to the number of answers.");
-		}
+		setAnswers(arr);
+		setGenAnswers(arr);
 		setShowAnswer(false);
 
     };
@@ -214,6 +210,7 @@ function ModalInsertSurvey(props) {
 												<Form.Label>Insert the answer </Form.Label>
 												<Form.Control
 													name="answer"
+													value={genAnswers[index]}
 													required
 													placeholder="Insert your answer"
 													type="string"

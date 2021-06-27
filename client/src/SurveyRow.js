@@ -27,20 +27,20 @@ function SurveyRow(props) {
 			/* Survey:
 			0:
 				id: 7
-				max: 3
-				min: 1
-				open: 0
-				options: Array(5)
-					0: {index: 0, id: 7, ref_q: 7, option_text: "Dark chocolate"}
-					...
-				length: 5
-				question: "Which is the best chocolate?"
-				ref_q: 7
-				required: null
-				1: {id: 7, question: "Which is the best chocolate?", min: 1, ref_q: 7, max: 3, …}
-				2: {id: 7, question: "Which is the best chocolate?", min: 1, ref_q: 7, max: 3, …}
-				3: {id: 8, question: "Would you like to say something?", min: null, ref_q: null, max: 100, …}
-				4: {id: 9, question: "Why do you like chocolate?", min: null, ref_q: null, max: 200, …}
+				max: 200
+				min: null
+				open: 1
+				options: (8) [null, {…}, {…}, null, null, {…}, {…}, {…}]
+				question: "Do you like chocolate?"
+				required: 1
+				__proto__: Object
+			1: {id: 11, question: "Would you rather have pizza or chocolate?", min: 0, max: 1, open: 0, …}
+			2: {id: 11, question: "Would you rather have pizza or chocolate?", min: 0, max: 1, open: 0, …}
+			3: {id: 9, question: "If yes, why do you like chocolate?", min: null, max: 150, open: 1, …}
+			4: {id: 10, question: "If no, why?", min: null, max: 150, open: 1, …}
+			5: {id: 8, question: "Which is the best chocolate?", min: 1, max: 3, open: 0, …}
+			6: {id: 8, question: "Which is the best chocolate?", min: 1, max: 3, open: 0, …}
+			7: {id: 8, question: "Which is the best chocolate?", min: 1, max: 3, open: 0, …}
 			*/
 			// If a question is open, it will be present multiple times.
 			// I remove in this case all the rows that contain a duplicated id
@@ -51,9 +51,11 @@ function SurveyRow(props) {
 			);
 			/*
 			s2:
-				0: {id: 7, question: "Which is the best chocolate?", min: 1, ref_q: 7, max: 3, …}
-				1: {id: 8, question: "Would you like to say something?", min: null, ref_q: null, max: 100, …}
-				2: {id: 9, question: "Why do you like chocolate?", min: null, ref_q: null, max: 200, …}
+				0: {id: 7, question: "Do you like chocolate?", min: null, max: 200, open: 1, …}
+				1: {id: 11, question: "Would you rather have pizza or chocolate?", min: 0, max: 1, open: 0, …}
+				2: {id: 9, question: "If yes, why do you like chocolate?", min: null, max: 150, open: 1, …}
+				3: {id: 10, question: "If no, why?", min: null, max: 150, open: 1, …}
+				4: {id: 8, question: "Which is the best chocolate?", min: 1, max: 3, open: 0, …}
 			*/
 			props.setSurvey(s2);
 		};

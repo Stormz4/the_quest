@@ -13,73 +13,87 @@
   - Retrieves all the surveys, even from different admins. It's used for a non-logged in user.
   - request parameters and request body content: //
   - response body content: 
-    -	surveys = [{ id: id of the survey, title: title of the survey, adminName: name of the admin that made the survey}, {...}]; 
+    -	surveys = [{ 
+        - `id`: id of the survey, 
+        - `title`: title of the survey,
+        - `adminName`: name of the admin that made the survey}, {...}]; 
 - GET `/api/surveys/admin`
   - Retrieves all the surveys for a given admin
   - request parameters and request body content: No sensible data is sent, the id of the logged user is retrieved by the back-end
   - response body content:
-    - surveys = ([{id: id of the survey, title: title of the survey, adminName: name of the admin that made the survey, n_submissions: number of submissions for each survey}, {...}]); 
+    - surveys = ([{
+      - `id`: id of the survey, 
+      - `title`: title of the survey,
+      - `adminName`: name of the admin that made the survey,
+      - `n_submissions`: number of submissions for each survey}, {...}]); 
 - GET `/api/surveys/id=:id`
   - Retrieves a survey by it's id and the questions/answers related to it
   - request parameters and request body content: id of the survey, passed as a parameter
   - response body content:
     - survey = [{
-          	id: id of the question,
-						question: text containing the question,
-						min: min in a closed question, null in an open question,
-						ref_q: ref of the question,
-						max: max of options checkable in a closed question, max number of characters in an open question,
-						open: 0 if it's a closed question, 1 otherwise,
-						required: null in a closed question, 0 or 1 in an open one,
-						options: [{...}],
-			}, {...}]; 
-    -  Options is made as such: {index:, id:, id_option:, ref_q:, option_text:}
+      - `id`: id of the question,
+      - `question`: text containing the question, 
+      - `min`: min in a closed question, null in an open question, 
+      - `max`: max of options checkable in a closed question, max number of characters in an open question, 
+      - `open`: 0 if it's a closed question, 1 otherwise, 
+      - `required`: null in a closed question, 0 or 1 in an open one, 
+      - `options`: [{...}],}, {...}]; 
+    -  Options is made as such: {
+       - `index`:,
+       - `id`:, 
+       - `id_option`:,
+       - `option_text`:}
 
 - GET `/api/answers/id=:id`
   - Retrieves all the answer sheets for a specific survey
   - request parameters and request body content: id of the survey, passed as a parameter
   - response body content:
     - answers = [{
-        id: id of the answer, 
-        ref_as: ref of the answer sheet, 
-        answer_text: text containing the answer of the user, 
-        ref_q: ref to the question, 
-        name: name of the user that submitted an answer sheet, 
-        ref_s: ref of the survey, 
-        ref_op: ref of the option, if it's a closed question
+      - `id`: id of the answer, 
+      - `ref_as`: ref of the answer sheet, 
+      - `answer_text`: text containing the answer of the user, 
+      - `ref_q`: ref to the question, 
+      - `name`: name of the user that submitted an answer sheet, 
+      - `ref_s`: ref of the survey, 
+      - `ref_op`: ref of the option, if it's a closed question
       },{...}]
 
 - POST `/api/surveys`
   - Insert a survey for a given admin
   - request parameters and request body content: 
-    - {title: title of the survey, questions: [{...}]}. 
+    - {`title`: title of the survey, `questions`: [{...}]}. 
     - A question is made as such:{
-					question: the value of the question, 
-					min: min in a closed question, null in an open question,
-					max: max of options checkable in a closed question, max number of characters in an open question,
-					answers: [...],
-					open: 0 if it's a closed question, 1 otherwise,
-					required: null in a closed question, 0 or 1 in an open one,
-				}; Answers contains all the possible options for a closed question.
+      - `question`: the value of the question, 
+      - `min`: min in a closed question, null in an open question,
+      - `max`: max of options checkable in a closed question, max number of characters in an open question,
+      - `answers`: [...],
+      - `open`: 0 if it's a closed question, 1 otherwise, 
+      - `required`: null in a closed question, 0 or 1 in an open one,
+				}; 
+      
+      Answers contains all the possible options for a closed question.
   - response body content: A status which tells if the operation was completed correctly
 
 - POST `/api/surveys/submit`
   - Submit a survey made by an user
   - request parameters and request body content: 
-    - A json made as such: {answers:, survey:, name:,});
-      - Answers = [{
-            id_question: id of the question, 
-            answer: value of the answer,
-            open:  0 if it's a closed question, 1 otherwise
-          },{...}]. 
+    - A json made as such: {
+        - `answers`: [{…}],
+        - `survey`: {...},
+        - `name`: name of the user,});
+      
+          - Answers = [{
+             - `id_question`: id of the question, 
+             - `answer`: value of the answer,
+             - `open`:  0 if it's a closed question, 1 otherwise
+           },{...}]. 
           
-        If it's an answer for a closed question: [{
-            id_question:, 
-            ref_op: ref of the option, 
-            answer:, 
-            open:},{...}]
-      - Survey = {id:, title:, adminName:}
-      - Name contains the name of the user
+          - If it's an answer for a closed question = [{ 
+            - `id_question`:, 
+            - `ref_op`: ref of the option, 
+            - `answer`:,
+            - `open`:},{...}]
+          - Survey = {`id`:, `title`:, `adminName`:}
   - response body content: A status which tells if the operation was completed correctly
 
 - POST `/api/login`

@@ -14,6 +14,7 @@ function AnswerSheetRow(props) {
 
 	// This method checks if an answer present in the answer sheet contain the same option id (ref_option) of the item rendered.
 	const evaluateCheck = (item) => {
+
 		if (props.answersSheet !== undefined) {
 			for (const answer of props.answersSheet[1]) {
 				if (answer.ref_op === item.id_option) return true;
@@ -38,7 +39,7 @@ function AnswerSheetRow(props) {
 	const renderOptions = (opt) => {
 		// I will filter the array, removing all the null options and maintaining only the options that have the same ref_q as the question rendered		// In this way, i will render every option for a given question
 		opt = opt.filter((item) => item != null);
-		opt = opt.filter((item) => item.ref_q === id);
+		opt = opt.filter((item) => item.id === id);
 
 		// After processing the array, render all the options present for the current question
 		return opt.map((item, index) => (
@@ -61,19 +62,21 @@ function AnswerSheetRow(props) {
 									open: 0,
 								},
 							];
+							
 							props.setAnswers(arr);
 						} else {
 							// If a check has been removed, remove the option by iterating all the
-							// answers made and removing the one with the same id_question
-							// of the item rendered.
+							// answers made and removing the one with the same id_option
 							let arr = [...props.answers];
-
+							
 							for (let i = 0; i < arr.length; i++) {
-								if (arr[i].id_question === item.id) {
+								
+								if (arr[i].ref_op === item.id_option) {
 									arr.splice(i, 1);
 									break;
 								}
 							}
+							
 							props.setAnswers(arr);
 						}
 					}}
@@ -104,6 +107,7 @@ function AnswerSheetRow(props) {
 								...props.answers,
 								{ id_question: id, answer: ev.target.value, open: 1 },
 							];
+							
 							for (let i = 0; i < arr.length - 1; i++) {
 								// Verifify if there is another answer with the same ID
 								// When the state is an array and you write a char in a form, a new element will be pushed.

@@ -200,7 +200,6 @@ exports.getSurveyById = (id) => {
 						index: i,
 						id: rows[i].id,
 						id_option: rows[i].id_option,
-						ref_q: rows[i].ref_q,
 						option_text: rows[i].option_text,
 					});
 				}
@@ -210,7 +209,6 @@ exports.getSurveyById = (id) => {
 				id: e.id,
 				question: e.question,
 				min: e.min,
-				ref_q: e.ref_q,
 				max: e.max,
 				open: e.open,
 				required: e.required,

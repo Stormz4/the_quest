@@ -41,7 +41,7 @@ function InsertSurveyRow(props) {
 
 	function renderItem() {
 		// Closed question
-		if (props.item.min != null) {
+		if (props.item.open === 0) {
 			return (
 				<Row>
 					<Col className="m-0 p-0">
