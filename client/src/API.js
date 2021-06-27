@@ -57,7 +57,6 @@ async function addSurvey(title, questions) {
 			title: title,
 			questions: questions,
 		});
-		console.log(res);
 		return res;
 	} catch (error) {
 		console.log(error);

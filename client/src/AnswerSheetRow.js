@@ -91,7 +91,8 @@ function AnswerSheetRow(props) {
 							<i>{props.item.question}</i>
 						</h6>
 					</Form.Label>
-					<Form.Control
+					<Form.Control 
+						as="textarea"
 						name="answers"
 						readOnly={props.loggedIn}
 						placeholder={evaluatePlaceholder()}
